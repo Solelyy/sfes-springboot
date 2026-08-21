@@ -1,0 +1,12 @@
+cookie:
+  secure: 'true'
+  sameSite: None
+
+spring:
+  datasource:
+    username: ${DB_USERNAME}
+    url: ${DB_URL}
+    password: ${DB_PASSWORD}
+
+jwt:
+  secret: ${JWT_SECRET}
