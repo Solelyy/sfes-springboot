@@ -1,4 +1,4 @@
-package com.backend.sfes;
+package com.sfes;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
