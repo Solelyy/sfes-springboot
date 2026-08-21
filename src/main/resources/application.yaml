@@ -1,3 +1,34 @@
 spring:
   application:
     name: sfes
+
+  datasource:
+    hikari:
+      maximum-pool-size: 15
+      minimum-idle: 1
+      connection-timeout: 3000
+
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+  threads:
+    virtual:
+      enabled: true
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: WARN
+
+jwt:
+  expiration: 86400000
+
+bucket:
+  capacity: 30
+  refill: 10
