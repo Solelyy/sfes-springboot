@@ -1,8 +1,6 @@
 package com.sfes.auth;
 
-import com.sfes.common.exceptions.MaximumLoginAttempts;
-import com.sfes.employee.entity.Employee;
-import com.sfes.employee.repository.EmployeeRepository;
+import com.sfes.common.exceptions.MaximumLoginAttemptsException;
 import com.sfes.user.entity.User;
 import com.sfes.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +27,7 @@ public class AuthService {
         if (user.getLockedUntil() != null &&
                 timeNow.isBefore(user.getLockedUntil())
         ) {
-            throw new MaximumLoginAttempts("Too many login attempts. Please try again later.");
+            throw new MaximumLoginAttemptsException("Too many login attempts. Please try again later.");
         }
 
         //2. check password
