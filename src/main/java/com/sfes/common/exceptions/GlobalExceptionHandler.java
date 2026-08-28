@@ -26,10 +26,31 @@ public class GlobalExceptionHandler {
                 .body(buildError(HttpStatus.UNAUTHORIZED, ex.getMessage()));
     }
 
-    @ExceptionHandler(MaximumLoginAttempts.class)
-    public ResponseEntity<ApiError> handleMaxLoginAttempts(MaximumLoginAttempts ex) {
+    @ExceptionHandler(MaximumLoginAttemptsException.class)
+    public ResponseEntity<ApiError> handleMaxLoginAttempts(MaximumLoginAttemptsException ex) {
         return  ResponseEntity
                 .status(HttpStatus.TOO_MANY_REQUESTS)
                 .body(buildError(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage()));
+    }
+
+    @ExceptionHandler(AccountAlreadyExistsException.class)
+    public ResponseEntity<ApiError> handleAccAlreadyExists(AccountAlreadyExistsException ex) {
+        return  ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(buildError(HttpStatus.CONFLICT, ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidAccountRoleException.class)
+    public ResponseEntity<ApiError> handleInvalidAccountRole(InvalidAccountRoleException ex) {
+        return  ResponseEntity
+                .status(HttpStatus.UNPROCESSABLE_CONTENT)
+                .body(buildError(HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage()));
+    }
+
+    @ExceptionHandler(EmailSendingException.class)
+    public ResponseEntity<ApiError> handleEmailSending(EmailSendingException ex) {
+        return  ResponseEntity
+                .status(HttpStatus.UNPROCESSABLE_CONTENT)
+                .body(buildError(HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage()));
     }
 }
