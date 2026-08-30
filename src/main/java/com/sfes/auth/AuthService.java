@@ -52,6 +52,7 @@ public class AuthService {
         //3. if successful login > reset attempts
         user.setFailedLoginAttempts(0);
         user.setLockedUntil(null);
+        user.setLastLogin(now);
 
         userRepository.save(user);
 
