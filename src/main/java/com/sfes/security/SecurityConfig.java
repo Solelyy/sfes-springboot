@@ -63,7 +63,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // public endpoints (auth)
                         .requestMatchers("/api/auth/**").permitAll()
-
+                        .requestMatchers("/api/superadmin/**").hasAuthority("SUPER_ADMIN")
                         // everything else requires authentication
                         .anyRequest().authenticated()
                 )
