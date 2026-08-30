@@ -7,7 +7,7 @@ import com.sfes.user.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -38,10 +38,10 @@ public class User extends BaseEntity {
     private int failedLoginAttempts = 0;
 
     @Column(name = "last_login")
-    private LocalDateTime lastLogin;
+    private Instant lastLogin;
 
     @Column(name = "locked_until")
-    private LocalDateTime lockedUntil;
+    private Instant lockedUntil;
 
     @OneToOne(mappedBy = "user")
     private Employee employee;
