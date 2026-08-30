@@ -1,4 +1,4 @@
-package com.sfes.auth;
+package com.sfes.auth.service;
 
 import com.sfes.common.exceptions.MaximumLoginAttemptsException;
 import com.sfes.user.entity.User;

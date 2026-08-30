@@ -2,6 +2,8 @@ package com.sfes.auth;
 
 import com.sfes.auth.dto.AuthResponse;
 import com.sfes.auth.dto.LoginRequest;
+import com.sfes.auth.service.AuthService;
+import com.sfes.auth.service.CookieService;
 import com.sfes.security.jwt.JwtService;
 import com.sfes.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final AuthService authService;
     private final JwtService jwtService;
+    private final CookieService cookieService;
 
     @Value("${cookie.secure}")
     private boolean cookieSecure;
@@ -37,14 +40,7 @@ public class AuthController {
         String email = user.getEmail();
         String token = jwtService.generateToken(email);
 
-        ResponseCookie cookie = ResponseCookie.from("token", token)
-                .httpOnly(true)
-                .secure(cookieSecure)
-                .sameSite(sameSite)
-                .path("/")
-                .maxAge(24 * 60 * 60) // 1 day
-                .build();
-
+        ResponseCookie cookie = cookieService.createCookie(token);
 
         AuthResponse authResponse = AuthResponse.builder()
                 .id(user.getId())
@@ -61,13 +57,7 @@ public class AuthController {
     //logout
     @PostMapping("/logout")
     public ResponseEntity<AuthResponse> logout() {
-        ResponseCookie cookie = ResponseCookie.from("token", "")
-                .httpOnly(true)
-                .secure(cookieSecure)
-                .sameSite(sameSite)
-                .path("/")
-                .maxAge(0)
-                .build();
+       ResponseCookie cookie = cookieService.removeCookie();
 
         AuthResponse authResponse = AuthResponse.builder()
                 .message("Logout successfully")
