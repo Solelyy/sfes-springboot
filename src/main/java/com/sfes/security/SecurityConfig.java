@@ -63,6 +63,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // public endpoints (auth)
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/invitations/**").permitAll()
                         .requestMatchers("/superadmin/**").hasAuthority("SUPER_ADMIN")
                         // everything else requires authentication
                         .anyRequest().authenticated()
