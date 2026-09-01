@@ -62,8 +62,8 @@ public class SecurityConfig {
                 // 4. Route protection rules
                 .authorizeHttpRequests(auth -> auth
                         // public endpoints (auth)
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/superadmin/**").hasAuthority("SUPER_ADMIN")
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/superadmin/**").hasAuthority("SUPER_ADMIN")
                         // everything else requires authentication
                         .anyRequest().authenticated()
                 )
