@@ -1,13 +1,16 @@
 package com.sfes.auth.dto;
 
-import lombok.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@Builder
-@NoArgsConstructor
-public class LoginRequest {
-    private String email;
-    private String password;
-}
+public record LoginRequest (
+        @NotBlank
+        @Email
+        String email,
+
+        @NotBlank
+        @Size(min = 8, max = 72)
+        String password
+)
+{}
