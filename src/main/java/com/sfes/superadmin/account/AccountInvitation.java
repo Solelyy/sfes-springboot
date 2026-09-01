@@ -24,4 +24,10 @@ public class AccountInvitation extends BaseEntity {
 
     @Column(name = "expires_at", nullable = false)
     private Instant expiresAt;
+
+    @Column(name = "used_at")
+    private Instant usedAt;
+
+    @Version
+    private Integer version;
 }
