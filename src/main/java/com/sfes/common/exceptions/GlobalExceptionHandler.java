@@ -1,9 +1,13 @@
 package com.sfes.common.exceptions;
 
 import com.sfes.common.classes.ApiError;
+import com.sfes.common.classes.ApiResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -52,5 +56,37 @@ public class GlobalExceptionHandler {
         return  ResponseEntity
                 .status(HttpStatus.UNPROCESSABLE_CONTENT)
                 .body(buildError(HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidInvitationException.class)
+    public ResponseEntity<ApiError> handleInvalidInvitation(InvalidInvitationException ex) {
+        return  ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(buildError(HttpStatus.CONFLICT, ex.getMessage()));
+    }
+
+    @ExceptionHandler(PasswordMismatchException.class)
+    public ResponseEntity<ApiError> handlePasswordMismatch(PasswordMismatchException ex) {
+        return  ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(buildError(HttpStatus.CONFLICT, ex.getMessage()));
+    }
+
+    @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+    public ResponseEntity<ApiResponse> handleOptimisticLockingFailure(
+            ObjectOptimisticLockingFailureException ex
+    ){
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new ApiResponse("Invitation has already been used"));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse> handleValidationException(
+            MethodArgumentNotValidException ex
+    ) {
+        return ResponseEntity
+                .badRequest()
+                .body(new ApiResponse("Invalid request"));
     }
 }
