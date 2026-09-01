@@ -1,6 +1,8 @@
-package com.sfes.auth;
+package com.sfes.auth.service;
 
+import com.sfes.auth.dto.AuthResult;
 import com.sfes.common.exceptions.MaximumLoginAttemptsException;
+import com.sfes.security.jwt.JwtService;
 import com.sfes.user.entity.User;
 import com.sfes.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,34 +16,52 @@ import java.time.temporal.ChronoUnit;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+
+    private static final int MAX_FAILED_ATTEMPTS = 5;
+    private static final long LOCK_DURATION_MINUTES = 15;
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public User authenticateUser(String email, String password) {
-        User user= userRepository.findByEmail(email)
-                .orElseThrow(() -> new BadCredentialsException("Incorrect email or password"));
+    public AuthResult login(String email, String password) {
+        User user = authenticate(email, password);
+        String token = jwtService.generateToken(user.getEmail());
 
-        int failedLoginAttempts = user.getFailedLoginAttempts();
+        return new AuthResult(user, token);
+    }
+
+    private User authenticate(String email, String password) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new BadCredentialsException("Incorrect email or password")
+                );
+
         Instant now = Instant.now();
 
-        //1. check first if account is locked
+        // 1. check if the account is currently locked
         if (user.getLockedUntil() != null) {
             if (now.isBefore(user.getLockedUntil())) {
                 throw new MaximumLoginAttemptsException(
                         "Too many login attempts. Please try again later."
                 );
             }
+
+            // lock has expired
             user.setLockedUntil(null);
             user.setFailedLoginAttempts(0);
         }
 
-        //2. check password
+        // 2. check password
         if (!passwordEncoder.matches(password, user.getHashedPassword())) {
-            int newFailedLoginAttempts = failedLoginAttempts + 1;
+            int newFailedLoginAttempts = user.getFailedLoginAttempts() + 1;
+
             user.setFailedLoginAttempts(newFailedLoginAttempts);
 
-            if (newFailedLoginAttempts >= 5) {
-                user.setLockedUntil(now.plus(15, ChronoUnit.MINUTES));
+            if (newFailedLoginAttempts >= MAX_FAILED_ATTEMPTS) {
+                user.setLockedUntil(
+                        now.plus(LOCK_DURATION_MINUTES, ChronoUnit.MINUTES)
+                );
             }
 
             userRepository.save(user);
@@ -49,7 +69,7 @@ public class AuthService {
             throw new BadCredentialsException("Incorrect email or password");
         }
 
-        //3. if successful login > reset attempts
+        // 3. Successful login
         user.setFailedLoginAttempts(0);
         user.setLockedUntil(null);
         user.setLastLogin(now);
@@ -59,4 +79,3 @@ public class AuthService {
         return user;
     }
 }
-

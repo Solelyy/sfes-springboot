@@ -1,4 +1,4 @@
-package com.sfes.superadmin.account;
+package com.sfes.superadmin.account.controller;
 
 import com.sfes.common.classes.ApiResponse;
 import com.sfes.superadmin.account.dto.RegisterRequest;
@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/superadmin/")
+@RequestMapping("/superadmin/")
 @RequiredArgsConstructor
 public class RegisterController {
     private final RegisterService registerService;

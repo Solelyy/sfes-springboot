@@ -62,8 +62,8 @@ public class SecurityConfig {
                 // 4. Route protection rules
                 .authorizeHttpRequests(auth -> auth
                         // public endpoints (auth)
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/superadmin/**").hasAuthority("SUPER_ADMIN")
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/superadmin/**").hasAuthority("SUPER_ADMIN")
                         // everything else requires authentication
                         .anyRequest().authenticated()
                 )
@@ -74,13 +74,13 @@ public class SecurityConfig {
                 // 6. Disable HTTP Basic auth
                 .httpBasic(AbstractHttpConfigurer::disable)
 
-                //7. Add API rate limit filter
+                //7. Add IP rate limit filter before Spring username/password authentication filter
                 .addFilterBefore(
                         ipRateLimitFilter,
                         UsernamePasswordAuthenticationFilter.class
                 )
 
-                // 8. Add JWT filter before Spring authentication filter
+                // 8. Add JWT filter before IP rate limit filter
                 .addFilterBefore(
                         jwtAuthenticationFilter,
                         IpRateLimitFilter.class
