@@ -32,7 +32,7 @@ logging:
     org.springframework.boot.context.config: DEBUG
 
 invitation:
-  expiration: 300000
+  expiration: 3600000
 
 app:
   frontend-url: http://localhost:5173
