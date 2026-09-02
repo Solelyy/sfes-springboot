@@ -1,6 +1,9 @@
 package com.sfes.superadmin.account.controller;
 
+import com.sfes.common.classes.ApiResponse;
+import com.sfes.superadmin.account.AccountInvitation;
 import com.sfes.superadmin.account.dto.ActivationRequest;
+import com.sfes.superadmin.account.dto.VerifyInvitationResponse;
 import com.sfes.superadmin.account.service.ActivationService;
 import com.sfes.auth.dto.AuthResponse;
 import com.sfes.auth.dto.AuthResult;
@@ -21,10 +24,13 @@ public class ActivationController {
     private final CookieService cookieService;
 
     @GetMapping("/{token}")
-    public ApiMessage verifyInvitation(@PathVariable String token) {
-        activationService.verifyInvitation(token);
+    public VerifyInvitationResponse verifyInvitation(@PathVariable String token) {
+        AccountInvitation invitation = activationService.verifyInvitation(token);
 
-        return new ApiMessage("Invitation is valid");
+        return new VerifyInvitationResponse(
+                "Invitation is valid",
+                invitation.getUser().getEmail()
+        );
     }
 
     @PostMapping("/{token}/activation")
