@@ -1,12 +1,10 @@
 package com.sfes.superadmin.management;
 
+import com.sfes.common.classes.ApiMessage;
 import com.sfes.common.classes.ApiResponse;
 import com.sfes.user.enums.Role;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/superadmin")
@@ -22,5 +20,14 @@ public class AccountsManagementController {
                 "Successfully retrieved accounts",
                 accountService.getAccounts(type)
         );
+    }
+
+    @PatchMapping("/accounts/{employeeId}/status")
+    public ApiMessage updateAccountStatus(
+            @PathVariable String employeeId,
+            @RequestBody UpdateStatusRequest request)
+    {
+        accountService.updateAccountStatus(employeeId, request.status());
+        return new ApiMessage("Account status successfully updated");
     }
 }
