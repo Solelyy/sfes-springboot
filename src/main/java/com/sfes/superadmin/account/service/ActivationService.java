@@ -22,6 +22,7 @@ public class ActivationService {
     private final AccountInvitationRepository accountInvitationRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final SuccessfulActivationService successfulActivationService;
 
     public AccountInvitation verifyInvitation(String token) {
         String hashedToken = invitationTokenService.hashToken(token);
@@ -60,6 +61,10 @@ public class ActivationService {
         user.setStatus(Status.ACTIVE);
 
         accountInvitation.setUsedAt(Instant.now());
+
+        successfulActivationService.sendSuccessActivation(
+                user.getEmail(), user.getEmployee().getFirstName()
+        );
 
         String jwtToken = jwtService.generateToken(user.getEmail());
         return new AuthResult(user, jwtToken);
