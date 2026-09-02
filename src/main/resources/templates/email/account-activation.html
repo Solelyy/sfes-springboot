@@ -1,7 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Activate your SFES account</title>
 </head>
 
@@ -16,7 +18,7 @@
 <table width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr>
         <td align="center">
-
+            <!-- Main Container -->
             <table
                     width="100%"
                     cellpadding="0"
@@ -32,16 +34,22 @@
                 <!-- Header -->
                 <tr>
                     <td style="
-                        padding: 24px 32px;
-                        border-bottom: 1px solid #e5e5e5;
+                    padding: 24px 32px;
+                    border-bottom: 1px solid #e5e5e5;
+                ">
+                        <div style="
+                        font-size: 20px;
+                        font-weight: bold;
+                        color: #222222;
                     ">
-                        <strong>QCU</strong>
+                            QCU
+                        </div>
 
                         <div style="
-                            margin-top: 4px;
-                            font-size: 13px;
-                            color: #777777;
-                        ">
+                        margin-top: 4px;
+                        font-size: 13px;
+                        color: #777777;
+                    ">
                             Student-Faculty Evaluation System
                         </div>
                     </td>
@@ -49,59 +57,85 @@
 
                 <!-- Content -->
                 <tr>
-                    <td style="padding: 36px 32px;">
+                    <td style="padding: 40px 32px;">
 
                         <h1 style="
-                            margin: 0 0 24px;
-                            font-size: 24px;
-                            color: #222222;
-                        ">
+                        margin: 0 0 24px;
+                        font-size: 24px;
+                        line-height: 1.3;
+                        font-weight: 600;
+                        color: #222222;
+                    ">
                             Account Activation
                         </h1>
 
-                        <p>
+                        <p style="
+                        margin: 0 0 20px;
+                        font-size: 15px;
+                        line-height: 1.6;
+                    ">
                             Hello,
                             <span th:text="${name}">there</span>,
                         </p>
 
-                        <p style="line-height: 1.6;">
+                        <p style="
+                        margin: 0 0 28px;
+                        font-size: 15px;
+                        line-height: 1.6;
+                    ">
                             Your SFES account has been created by the
                             administrator. Please activate your account
                             to get started.
                         </p>
 
                         <!-- Activation Button -->
-                        <p style="margin: 28px 0;">
-                            <a
-                                    th:href="${activationLink}"
-                                    style="
-                                    display: inline-block;
-                                    padding: 12px 22px;
-                                    background-color: #222222;
-                                    color: #ffffff;
-                                    text-decoration: none;
-                                    font-size: 14px;
-                                    font-weight: 600;
-                                "
-                            >
-                                Activate Account
-                            </a>
-                        </p>
+                        <table
+                                cellpadding="0"
+                                cellspacing="0"
+                                border="0"
+                                style="margin-bottom: 32px;"
+                        >
+                            <tr>
+                                <td
+                                        align="center"
+                                        style="
+                                        background-color: #222222;
+                                        border-radius: 4px;
+                                    "
+                                >
+                                    <a
+                                            th:href="${activationLink}"
+                                            style="
+                                            display: inline-block;
+                                            padding: 12px 24px;
+                                            font-size: 14px;
+                                            font-weight: bold;
+                                            color: #ffffff;
+                                            text-decoration: none;
+                                        "
+                                    >
+                                        Activate Account
+                                    </a>
+                                </td>
+                            </tr>
+                        </table>
 
                         <p style="
-                            font-size: 13px;
-                            color: #777777;
-                            line-height: 1.6;
-                        ">
+                        margin: 0 0 12px;
+                        font-size: 13px;
+                        line-height: 1.6;
+                        color: #777777;
+                    ">
                             This invitation link will expire after the
                             configured period.
                         </p>
 
                         <p style="
-                            font-size: 13px;
-                            color: #777777;
-                            line-height: 1.6;
-                        ">
+                        margin: 0;
+                        font-size: 13px;
+                        line-height: 1.6;
+                        color: #777777;
+                    ">
                             If you did not expect this email, you may
                             safely ignore it.
                         </p>
@@ -112,12 +146,13 @@
                 <!-- Footer -->
                 <tr>
                     <td style="
-                        padding: 20px 32px;
-                        border-top: 1px solid #e5e5e5;
-                        background-color: #fafafa;
-                        font-size: 12px;
-                        color: #888888;
-                    ">
+                    padding: 20px 32px;
+                    border-top: 1px solid #e5e5e5;
+                    background-color: #fafafa;
+                    font-size: 12px;
+                    line-height: 1.6;
+                    color: #888888;
+                ">
                         QCU Student-Faculty Evaluation System
                         <br>
                         This is an automated message. Please do not reply.
@@ -128,6 +163,7 @@
 
         </td>
     </tr>
+
 </table>
 
 </body>
