@@ -101,4 +101,18 @@ public class GlobalExceptionHandler {
                         "An unexpected error occurred"
                 ));
     }
+
+    @ExceptionHandler(AccountNotFoundException.class)
+    public ResponseEntity<ApiError> handleAccountNotFound(AccountNotFoundException ex) {
+        return ResponseEntity
+                .badRequest()
+                .body(buildError(HttpStatus.BAD_REQUEST, ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidRequestException.class)
+    public ResponseEntity<ApiError> handleInvalidRequest(InvalidRequestException ex) {
+        return ResponseEntity
+                .badRequest()
+                .body(buildError(HttpStatus.BAD_REQUEST, ex.getMessage()));
+    }
 }
