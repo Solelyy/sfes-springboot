@@ -115,4 +115,13 @@ public class GlobalExceptionHandler {
                 .badRequest()
                 .body(buildError(HttpStatus.BAD_REQUEST, ex.getMessage()));
     }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiError> handleInvalidRequest(AccessDeniedException ex) {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(buildError(HttpStatus.FORBIDDEN, ex.getMessage()));
+    }
+
+
 }

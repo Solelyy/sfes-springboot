@@ -1,9 +1,11 @@
 package com.sfes.auth.service;
 
 import com.sfes.auth.dto.AuthResult;
+import com.sfes.common.exceptions.AccessDeniedException;
 import com.sfes.common.exceptions.MaximumLoginAttemptsException;
 import com.sfes.security.jwt.JwtService;
 import com.sfes.user.entity.User;
+import com.sfes.user.enums.Status;
 import com.sfes.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -50,6 +52,11 @@ public class AuthService {
             // lock has expired
             user.setLockedUntil(null);
             user.setFailedLoginAttempts(0);
+        }
+
+        //check if account is not active
+        if (!(user.getStatus() == Status.ACTIVE)) {
+            throw new AccessDeniedException("Account is not active");
         }
 
         // 2. check password
