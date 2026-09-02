@@ -1,5 +1,5 @@
 package com.sfes.common.classes;
 
-public record ApiResponse (
+public record ApiMessage(
         String message
 ) {}
