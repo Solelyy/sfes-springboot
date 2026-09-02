@@ -47,7 +47,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
 
         // 2. Only attempt authentication if a token exists
-        if (token != null &&
+        if (token != null && !token.isBlank() &&
                 SecurityContextHolder.getContext().getAuthentication() == null) {
 
             try {
