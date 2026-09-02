@@ -5,7 +5,7 @@ import com.sfes.superadmin.account.service.ActivationService;
 import com.sfes.auth.dto.AuthResponse;
 import com.sfes.auth.dto.AuthResult;
 import com.sfes.auth.service.CookieService;
-import com.sfes.common.classes.ApiResponse;
+import com.sfes.common.classes.ApiMessage;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -21,10 +21,10 @@ public class ActivationController {
     private final CookieService cookieService;
 
     @GetMapping("/{token}")
-    public ApiResponse verifyInvitation(@PathVariable String token) {
+    public ApiMessage verifyInvitation(@PathVariable String token) {
         activationService.verifyInvitation(token);
 
-        return new ApiResponse("Invitation is valid");
+        return new ApiMessage("Invitation is valid");
     }
 
     @PostMapping("/{token}/activation")
