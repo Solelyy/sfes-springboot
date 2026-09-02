@@ -1,6 +1,6 @@
 package com.sfes.superadmin.account.controller;
 
-import com.sfes.common.classes.ApiResponse;
+import com.sfes.common.classes.ApiMessage;
 import com.sfes.superadmin.account.dto.RegisterRequest;
 import com.sfes.superadmin.account.service.EmailActivationService;
 import com.sfes.superadmin.account.service.RegisterService;
@@ -17,11 +17,11 @@ public class RegisterController {
     private final EmailActivationService emailActivationService;
 
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse> registerAccount(@Valid  @RequestBody RegisterRequest request) {
+    public ResponseEntity<ApiMessage> registerAccount(@Valid  @RequestBody RegisterRequest request) {
         String rawToken = registerService.registerUser(request);
 
         emailActivationService.sendActivationEmail(request.email(), request.firstName(), rawToken);
 
-        return ResponseEntity.ok(new ApiResponse("Account successfully created."));
+        return ResponseEntity.ok(new ApiMessage("Account successfully created."));
     }
 }
