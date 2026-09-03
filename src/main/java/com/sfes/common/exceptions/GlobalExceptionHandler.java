@@ -123,5 +123,11 @@ public class GlobalExceptionHandler {
                 .body(buildError(HttpStatus.FORBIDDEN, ex.getMessage()));
     }
 
+    @ExceptionHandler(FrequentResetPasswordException.class)
+    public ResponseEntity<ApiError> handleFrequentResetPassword(FrequentResetPasswordException ex) {
+        return  ResponseEntity
+                .status(HttpStatus.TOO_MANY_REQUESTS)
+                .body(buildError(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage()));
+    }
 
 }
