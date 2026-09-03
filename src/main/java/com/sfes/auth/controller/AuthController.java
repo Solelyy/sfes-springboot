@@ -3,8 +3,10 @@ package com.sfes.auth;
 import com.sfes.auth.dto.AuthResponse;
 import com.sfes.auth.dto.AuthResult;
 import com.sfes.auth.dto.LoginRequest;
+import com.sfes.auth.dto.VerifyEmailRequest;
 import com.sfes.auth.service.AuthService;
 import com.sfes.auth.service.CookieService;
+import com.sfes.common.classes.ApiMessage;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -53,5 +55,10 @@ public class AuthController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(response);
+    }
+
+    @PostMapping("/email")
+    public ApiMessage checkEmail(@Valid @RequestBody VerifyEmailRequest request) {
+        return new ApiMessage("Account exists");
     }
 }

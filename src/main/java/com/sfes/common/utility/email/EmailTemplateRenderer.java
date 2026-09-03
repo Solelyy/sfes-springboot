@@ -1,5 +1,6 @@
-package com.sfes.superadmin.account.email;
+package com.sfes.common.utility;
 
+import com.sfes.common.classes.EmailContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
