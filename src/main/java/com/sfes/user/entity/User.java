@@ -45,4 +45,7 @@ public class User extends BaseEntity {
 
     @OneToOne(mappedBy = "user")
     private Employee employee;
+
+    @Column(name = "password_changed_at")
+    private Instant passwordChangedAt;
 }
