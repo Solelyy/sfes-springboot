@@ -14,6 +14,7 @@ import java.time.Instant;
 @Builder
 
 @Entity
+@Table(name = "account_invitation")
 public class AccountInvitation extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
