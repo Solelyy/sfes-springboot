@@ -29,6 +29,9 @@ jwt:
 invitation:
   expiration: 172800000
 
+reset-password:
+  expiration: 3600000
+
 app:
   frontend-url: http://localhost:5173
   email:
