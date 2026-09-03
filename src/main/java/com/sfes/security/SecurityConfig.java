@@ -64,10 +64,13 @@ public class SecurityConfig {
                         // public endpoints (auth)
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/invitations/**").permitAll()
+                        .requestMatchers("/password-resets/**").permitAll()
+
                         //rbac
                         .requestMatchers("/superadmin/**").hasAuthority("SUPER_ADMIN")
                         .requestMatchers("/registrar/**").hasAuthority("REGISTRAR")
                         .requestMatchers("/guidance/**").hasAuthority("GUIDANCE")
+
                         // everything else requires authentication
                         .anyRequest().authenticated()
                 )
