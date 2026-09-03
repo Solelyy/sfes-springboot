@@ -1,4 +1,4 @@
-package com.sfes.superadmin.account.email;
+package com.sfes.common.utility.email;
 
 import com.resend.Resend;
 import org.springframework.beans.factory.annotation.Value;
