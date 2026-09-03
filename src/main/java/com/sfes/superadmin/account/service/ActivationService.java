@@ -3,6 +3,7 @@ package com.sfes.superadmin.account.service;
 import com.sfes.auth.dto.AuthResult;
 import com.sfes.common.exceptions.InvalidInvitationException;
 import com.sfes.common.exceptions.PasswordMismatchException;
+import com.sfes.common.utility.TokenService;
 import com.sfes.security.jwt.JwtService;
 import com.sfes.superadmin.account.AccountInvitation;
 import com.sfes.superadmin.account.AccountInvitationRepository;
@@ -18,14 +19,14 @@ import java.time.Instant;
 @Service
 @RequiredArgsConstructor
 public class ActivationService {
-    private final InvitationTokenService invitationTokenService;
+    private final TokenService tokenService;
     private final AccountInvitationRepository accountInvitationRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final SuccessfulActivationService successfulActivationService;
 
     public AccountInvitation verifyInvitation(String token) {
-        String hashedToken = invitationTokenService.hashToken(token);
+        String hashedToken = tokenService.hashToken(token);
 
         AccountInvitation invitation = accountInvitationRepository.findByTokenHashed(hashedToken)
                 .orElseThrow(() -> new InvalidInvitationException("Invalid Invitation"));
