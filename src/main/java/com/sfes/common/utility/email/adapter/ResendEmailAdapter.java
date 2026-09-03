@@ -1,11 +1,11 @@
-package com.sfes.superadmin.account.email.adapter;
+package com.sfes.common.utility.email.adapter;
 
 import com.resend.Resend;
 import com.resend.services.emails.model.CreateEmailOptions;
 import com.sfes.common.exceptions.EmailSendingException;
 import com.sfes.common.classes.EmailContext;
-import com.sfes.superadmin.account.email.EmailSender;
-import com.sfes.common.utility.EmailTemplateRenderer;
+import com.sfes.common.utility.email.EmailSender;
+import com.sfes.common.utility.email.EmailTemplateRenderer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
