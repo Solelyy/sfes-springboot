@@ -1,4 +1,4 @@
-package com.sfes.superadmin.account.email;
+package com.sfes.common.classes;
 
 import java.util.Map;
 
