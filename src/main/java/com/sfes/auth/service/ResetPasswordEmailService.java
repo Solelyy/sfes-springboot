@@ -1,4 +1,4 @@
-package com.sfes.superadmin.account.service;
+package com.sfes.auth.service;
 
 import com.sfes.common.classes.EmailContext;
 import com.sfes.common.utility.email.EmailSender;
@@ -10,8 +10,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class EmailActivationService {
-
+public class ResetPasswordEmailService {
     private final EmailSender emailSender;
 
     @Value("${app.frontend-url}")
@@ -20,28 +19,29 @@ public class EmailActivationService {
     @Value("${app.email.from}")
     private String from;
 
-    public void sendActivationEmail(
+    public void sendResetPasswordEmail(
             String recipientEmail,
             String recipientName,
-            String activationToken
+            String resetPasswordToken
     ) {
-        String activationLink = buildActivationLink(activationToken);
+        String resetPasswordLink = buildResetPasswordLink(resetPasswordToken);
 
         EmailContext emailContext = new EmailContext(
                 from,
                 recipientEmail,
-                "Activate your SFES account",
-                "email/account-activation",
+                "Reset Password - QCU SFES",
+                "email/reset-password",
                 Map.of(
                         "name", recipientName,
-                        "activationLink", activationLink
+                        "resetPasswordLink", resetPasswordLink
                 )
         );
 
         emailSender.sendEmail(emailContext);
     }
 
-    private String buildActivationLink(String activationToken) {
-        return frontendUrl + "/activate?token=" + activationToken;
+    private String buildResetPasswordLink(String resetPasswordToken) {
+        return frontendUrl + "/reset-password?token=" + resetPasswordToken;
     }
 }
+

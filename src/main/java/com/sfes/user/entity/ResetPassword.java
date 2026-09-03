@@ -1,7 +1,6 @@
-package com.sfes.superadmin.account;
+package com.sfes.user.entity;
 
 import com.sfes.common.classes.BaseEntity;
-import com.sfes.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,11 +12,11 @@ import java.time.Instant;
 @NoArgsConstructor
 @Builder
 
+@Table(name = "reset_password")
 @Entity
-@Table(name = "account_invitation")
-public class AccountInvitation extends BaseEntity {
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
+public class ResetPassword extends BaseEntity {
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(name = "token_hashed", nullable = false, unique = true, length = 70)

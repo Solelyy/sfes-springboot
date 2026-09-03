@@ -1,9 +1,9 @@
-package com.sfes.superadmin.account.email.adapter;
+package com.sfes.common.utility.email.adapter;
 
 import com.sfes.common.exceptions.EmailSendingException;
-import com.sfes.superadmin.account.email.EmailContext;
-import com.sfes.superadmin.account.email.EmailSender;
-import com.sfes.superadmin.account.email.EmailTemplateRenderer;
+import com.sfes.common.classes.EmailContext;
+import com.sfes.common.utility.email.EmailSender;
+import com.sfes.common.utility.email.EmailTemplateRenderer;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;

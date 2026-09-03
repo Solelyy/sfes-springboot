@@ -2,6 +2,7 @@ package com.sfes.superadmin.account.service;
 
 import com.sfes.common.exceptions.AccountAlreadyExistsException;
 import com.sfes.common.exceptions.InvalidAccountRoleException;
+import com.sfes.common.utility.TokenService;
 import com.sfes.employee.entity.Employee;
 import com.sfes.employee.repository.EmployeeRepository;
 import com.sfes.superadmin.account.AccountInvitationRepository;
@@ -23,7 +24,7 @@ import java.time.Instant;
 public class RegisterService {
     private final EmployeeRepository employeeRepository;
     private final UserRepository userRepository;
-    private final InvitationTokenService invitationTokenService;
+    private final TokenService tokenService;
     private final AccountInvitationRepository accountInvitationRepository;
 
     @Value("${invitation.expiration}")
@@ -60,11 +61,11 @@ public class RegisterService {
         employeeRepository.save(employee);
 
         Instant now = Instant.now();
-        String rawToken = invitationTokenService.generateToken();
+        String rawToken = tokenService.generateToken();
 
         AccountInvitation accountInvitation = AccountInvitation.builder()
                 .user(user)
-                .tokenHashed(invitationTokenService.hashToken(rawToken))
+                .tokenHashed(tokenService.hashToken(rawToken))
                 .expiresAt(now.plusMillis(invitationExpiration))
                 .build();
         accountInvitationRepository.save(accountInvitation);

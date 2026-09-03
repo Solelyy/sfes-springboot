@@ -1,4 +1,4 @@
-package com.sfes.auth;
+package com.sfes.auth.controller;
 
 import com.sfes.auth.dto.AuthResponse;
 import com.sfes.auth.dto.AuthResult;
