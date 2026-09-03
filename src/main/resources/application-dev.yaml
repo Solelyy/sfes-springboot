@@ -35,6 +35,9 @@ logging:
 invitation:
   expiration: 3600000
 
+reset-password:
+  expiration: 300000
+
 app:
   frontend-url: http://localhost:5173
   email:
