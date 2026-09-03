@@ -1,4 +1,4 @@
-package com.sfes.superadmin.account.service;
+package com.sfes.common.utility;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.util.HexFormat;
 
 @Service
 @RequiredArgsConstructor
-public class InvitationTokenService {
+public class TokenService {
     private final SecureRandom secureRandom = new SecureRandom();
 
     public String generateToken() {
