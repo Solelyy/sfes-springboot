@@ -30,6 +30,7 @@ jwt:
 logging:
   level:
     org.springframework.boot.context.config: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
 
 invitation:
   expiration: 3600000
