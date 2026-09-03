@@ -1,7 +1,7 @@
 package com.sfes.superadmin.account.service;
 
-import com.sfes.superadmin.account.email.EmailContext;
-import com.sfes.superadmin.account.email.EmailSender;
+import com.sfes.common.classes.EmailContext;
+import com.sfes.common.utility.email.EmailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
