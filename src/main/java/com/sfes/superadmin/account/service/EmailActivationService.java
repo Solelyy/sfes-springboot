@@ -4,6 +4,7 @@ import com.sfes.common.classes.EmailContext;
 import com.sfes.common.utility.email.EmailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -20,6 +21,7 @@ public class EmailActivationService {
     @Value("${app.email.from}")
     private String from;
 
+    @Async
     public void sendActivationEmail(
             String recipientEmail,
             String recipientName,
