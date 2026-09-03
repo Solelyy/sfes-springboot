@@ -1,12 +1,12 @@
 package com.sfes.superadmin.account.service;
 
-import com.sfes.auth.dto.AuthResult;
 import com.sfes.common.exceptions.InvalidInvitationException;
 import com.sfes.common.exceptions.PasswordMismatchException;
 import com.sfes.common.utility.TokenService;
 import com.sfes.security.jwt.JwtService;
 import com.sfes.superadmin.account.AccountInvitation;
 import com.sfes.superadmin.account.AccountInvitationRepository;
+import com.sfes.superadmin.account.dto.ActivationResponse;
 import com.sfes.user.entity.User;
 import com.sfes.user.enums.Status;
 import jakarta.transaction.Transactional;
@@ -23,7 +23,6 @@ public class ActivationService {
     private final AccountInvitationRepository accountInvitationRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final SuccessfulActivationService successfulActivationService;
 
     public AccountInvitation verifyInvitation(String token) {
         String hashedToken = tokenService.hashToken(token);
@@ -51,7 +50,7 @@ public class ActivationService {
     }
 
     @Transactional
-    public AuthResult activateAccount(String token, String password, String confirmPassword) {
+    public ActivationResponse activateAccount(String token, String password, String confirmPassword) {
         AccountInvitation accountInvitation = verifyInvitation(token);
         User user = accountInvitation.getUser();
 
@@ -63,11 +62,12 @@ public class ActivationService {
 
         accountInvitation.setUsedAt(Instant.now());
 
-        successfulActivationService.sendSuccessActivation(
-                user.getEmail(), user.getEmployee().getFirstName()
-        );
-
         String jwtToken = jwtService.generateToken(user.getEmail());
-        return new AuthResult(user, jwtToken);
+        return new ActivationResponse(
+                user.getEmail(),
+                user.getRole(),
+                user.getEmployee().getFirstName(),
+                jwtToken
+        );
     }
 }
