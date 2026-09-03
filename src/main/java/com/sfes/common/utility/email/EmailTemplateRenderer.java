@@ -1,4 +1,4 @@
-package com.sfes.common.utility;
+package com.sfes.common.utility.email;
 
 import com.sfes.common.classes.EmailContext;
 import lombok.RequiredArgsConstructor;
