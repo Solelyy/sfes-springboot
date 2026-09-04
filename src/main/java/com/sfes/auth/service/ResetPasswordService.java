@@ -1,8 +1,8 @@
 package com.sfes.auth.service;
 
 import com.sfes.auth.dto.ResetPasswordResponse;
-import com.sfes.common.exceptions.AccessDeniedException;
-import com.sfes.common.exceptions.FrequentResetPasswordException;
+import com.sfes.common.exceptions.*;
+import com.sfes.common.utility.PasswordService;
 import com.sfes.common.utility.TokenService;
 import com.sfes.user.entity.ResetPassword;
 import com.sfes.user.entity.User;
@@ -13,11 +13,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -25,11 +26,15 @@ import java.time.temporal.ChronoUnit;
 public class ResetPasswordService {
     private final UserRepository userRepository;
     private final TokenService tokenService;
-    private final ResetPasswordEmailService resetPasswordEmailService;
     private final ResetPasswordRepository resetPasswordRepository;
+    private final PasswordService passwordService;
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${reset-password.expiration}")
     private long expiration;
+
+    @Value("${reset-password.cooldown}")
+    private long cooldown;
 
     private static final long PASSWORD_TIMEOUT_MINS = 5;
 
@@ -57,6 +62,21 @@ public class ResetPasswordService {
             }
         }
 
+        Optional <ResetPassword> latestRequest =
+                resetPasswordRepository.findTopByUserOrderByCreatedAtDesc(user);
+
+        if (latestRequest.isPresent()) {
+            Instant cooldownUntil = latestRequest.get()
+                    .getCreatedAt()
+                    .plus(cooldown, ChronoUnit.MILLIS);
+
+            if (now.isBefore(cooldownUntil)) {
+                throw new FrequentResetPasswordException(
+                        "A password reset request was recently made. Please try again later"
+                );
+            }
+        }
+
         String rawToken = tokenService.generateToken();
 
         ResetPassword resetPassword = ResetPassword.builder()
@@ -72,12 +92,48 @@ public class ResetPasswordService {
 
     }
 
-    @Async
-    public void sendResetPasswordEmail(String email, String firstName, String rawToken) {
-        resetPasswordEmailService.sendResetPasswordEmail(
-                email, firstName, rawToken
-        );
+    public ResetPassword verifyResetPasswordToken(String token){
+        if (token == null || token.isBlank()) {
+            throw new InvalidRequestException("Invalid request");
+        }
 
-        log.info("Password reset email sent");
+        String hashedToken = tokenService.hashToken(token);
+
+        ResetPassword resetPassword = resetPasswordRepository.findByTokenHashed(hashedToken)
+                .orElseThrow(() -> new InvalidRequestException("Invalid reset password request"));
+
+        if (resetPassword.getUsedAt() != null) {
+            throw new InvalidTokenException("Password has already been reset");
+        }
+
+        Instant now = Instant.now();
+
+        if (!now.isBefore(resetPassword.getExpiresAt())) {
+            throw new ExpiredTokenException("Reset password already expired");
+        }
+
+        return  resetPassword;
+    }
+
+    @Transactional
+    public ResetPasswordResponse resetPassword(String token, String password, String confirmPassword) {
+        ResetPassword resetPassword = verifyResetPasswordToken(token);
+        User user = resetPassword.getUser();
+
+        Instant now = Instant.now();
+
+        passwordService.checkPasswordsMatch(password, confirmPassword);
+
+        String hashedPassword = passwordEncoder.encode(password);
+
+        user.setPasswordChangedAt(now);
+        user.setUpdatedAt(now);
+        user.setHashedPassword(hashedPassword);
+
+        resetPassword.setUsedAt(now);
+
+        return new ResetPasswordResponse(
+                user.getEmail(), user.getEmployee().getFirstName()
+        );
     }
 }

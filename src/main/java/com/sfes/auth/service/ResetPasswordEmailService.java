@@ -4,6 +4,7 @@ import com.sfes.common.classes.EmailContext;
 import com.sfes.common.utility.email.EmailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -19,6 +20,7 @@ public class ResetPasswordEmailService {
     @Value("${app.email.from}")
     private String from;
 
+    @Async
     public void sendResetPasswordEmail(
             String recipientEmail,
             String recipientName,
@@ -42,6 +44,19 @@ public class ResetPasswordEmailService {
 
     private String buildResetPasswordLink(String resetPasswordToken) {
         return frontendUrl + "/reset-password?token=" + resetPasswordToken;
+    }
+
+    @Async
+    public void sendSuccessfulResetPassword(String email, String firstName){
+        EmailContext emailContext = new EmailContext(
+                from,
+                email,
+                "Successful Password Reset - QCU SFES",
+                "email/successful-reset-password",
+                Map.of("name", firstName, "loginUrl", frontendUrl)
+        );
+
+        emailSender.sendEmail(emailContext);
     }
 }
 
