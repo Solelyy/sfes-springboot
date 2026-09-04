@@ -31,6 +31,7 @@ invitation:
 
 reset-password:
   expiration: 3600000
+  cooldown: 3600000
 
 app:
   frontend-url: http://localhost:5173

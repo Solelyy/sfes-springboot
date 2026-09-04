@@ -59,8 +59,8 @@ public class GlobalExceptionHandler {
                 .body(buildError(HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage()));
     }
 
-    @ExceptionHandler(InvalidInvitationException.class)
-    public ResponseEntity<ApiError> handleInvalidInvitation(InvalidInvitationException ex) {
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ApiError> handleInvalidToken(InvalidTokenException ex) {
         return  ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(buildError(HttpStatus.CONFLICT, ex.getMessage()));
@@ -128,6 +128,13 @@ public class GlobalExceptionHandler {
         return  ResponseEntity
                 .status(HttpStatus.TOO_MANY_REQUESTS)
                 .body(buildError(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage()));
+    }
+
+    @ExceptionHandler(ExpiredTokenException.class)
+    public ResponseEntity<ApiError> handleExpiredToken(ExpiredTokenException ex) {
+        return  ResponseEntity
+                .status(HttpStatus.GONE)
+                .body(buildError(HttpStatus.GONE, ex.getMessage()));
     }
 
 }

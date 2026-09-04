@@ -1,7 +1,9 @@
 package com.sfes.superadmin.account.service;
 
-import com.sfes.common.exceptions.InvalidInvitationException;
-import com.sfes.common.exceptions.PasswordMismatchException;
+import com.sfes.common.exceptions.ExpiredTokenException;
+import com.sfes.common.exceptions.InvalidTokenException;
+import com.sfes.common.exceptions.InvalidRequestException;
+import com.sfes.common.utility.PasswordService;
 import com.sfes.common.utility.TokenService;
 import com.sfes.security.jwt.JwtService;
 import com.sfes.superadmin.account.AccountInvitation;
@@ -23,30 +25,25 @@ public class ActivationService {
     private final AccountInvitationRepository accountInvitationRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final PasswordService passwordService;
 
     public AccountInvitation verifyInvitation(String token) {
         String hashedToken = tokenService.hashToken(token);
 
         AccountInvitation invitation = accountInvitationRepository.findByTokenHashed(hashedToken)
-                .orElseThrow(() -> new InvalidInvitationException("Invalid Invitation"));
+                .orElseThrow(() -> new InvalidRequestException("Invalid Invitation"));
 
         Instant now = Instant.now();
 
         if (invitation.getUsedAt() != null) {
-            throw new InvalidInvitationException("Account already activated");
+            throw new InvalidTokenException("Account already activated");
         }
 
         if (!now.isBefore(invitation.getExpiresAt())) {
-            throw new InvalidInvitationException("Invitation expired");
+            throw new ExpiredTokenException("Invitation expired");
         }
 
         return invitation;
-    }
-
-    private void checkValidPassword(String password, String confirmPassword){
-        if (!password.equals(confirmPassword)) {
-            throw new PasswordMismatchException("Passwords do not match");
-        }
     }
 
     @Transactional
@@ -54,7 +51,7 @@ public class ActivationService {
         AccountInvitation accountInvitation = verifyInvitation(token);
         User user = accountInvitation.getUser();
 
-        checkValidPassword(password, confirmPassword);
+        passwordService.checkPasswordsMatch(password, confirmPassword);
 
         String hashedPassword = passwordEncoder.encode(password);
         user.setHashedPassword(hashedPassword);

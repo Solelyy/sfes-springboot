@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Scanner;
 
 public class HashPassword {
-    public static void main (String[] args) {
+    static void main (String[] args) {
         Scanner scanner = new Scanner(System.in);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
