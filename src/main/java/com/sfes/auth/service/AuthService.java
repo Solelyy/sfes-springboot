@@ -1,8 +1,11 @@
 package com.sfes.auth.service;
 
 import com.sfes.auth.dto.AuthResult;
+import com.sfes.auth.dto.AuthUser;
 import com.sfes.common.exceptions.AccessDeniedException;
+import com.sfes.common.exceptions.InvalidRequestException;
 import com.sfes.common.exceptions.MaximumLoginAttemptsException;
+import com.sfes.employee.entity.Employee;
 import com.sfes.security.jwt.JwtService;
 import com.sfes.user.entity.User;
 import com.sfes.user.enums.Status;
@@ -84,5 +87,18 @@ public class AuthService {
         userRepository.save(user);
 
         return user;
+    }
+
+    public AuthUser getAuthUser(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new InvalidRequestException("Invalid request"));
+
+        return new AuthUser(
+                user.getEmployee().getEmployeeId(),
+                user.getEmail(),
+                user.getRole(),
+                user.getEmployee().getFirstName(),
+                user.getEmployee().getLastName()
+        );
     }
 }
