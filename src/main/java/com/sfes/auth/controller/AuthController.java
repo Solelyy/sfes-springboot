@@ -2,15 +2,23 @@ package com.sfes.auth.controller;
 
 import com.sfes.auth.dto.AuthResponse;
 import com.sfes.auth.dto.AuthResult;
+import com.sfes.auth.dto.AuthUser;
 import com.sfes.auth.dto.LoginRequest;
 import com.sfes.auth.service.AuthService;
 import com.sfes.auth.service.CookieService;
+import com.sfes.common.classes.ApiResponse;
+import com.sfes.security.user.CustomUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -53,5 +61,23 @@ public class AuthController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(response);
+    }
+
+    @GetMapping("/me")
+    public ApiResponse<AuthUser> getAuthUser(@AuthenticationPrincipal CustomUserDetails customUser) {
+
+        if (customUser == null) {
+            return new ApiResponse<>(
+                    "User is unauthenticated",
+                    null
+            );
+        }
+
+        AuthUser authUser = authService.getAuthUser(customUser.getUsername());
+
+        return new ApiResponse<>(
+                "Successfully retrieved authenticated user.",
+                authUser
+        );
     }
 }
