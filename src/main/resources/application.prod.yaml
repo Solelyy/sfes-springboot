@@ -34,7 +34,7 @@ reset-password:
   cooldown: 3600000
 
 app:
-  frontend-url: http://localhost:5173
+  frontend-url: http://localhost:3000
   email:
     provider: smtp
     from: {MAIL_FROM}
