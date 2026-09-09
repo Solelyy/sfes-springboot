@@ -5,7 +5,6 @@ import com.sfes.common.exceptions.InvalidTokenException;
 import com.sfes.common.exceptions.InvalidRequestException;
 import com.sfes.common.utility.PasswordService;
 import com.sfes.common.utility.TokenService;
-import com.sfes.security.jwt.JwtService;
 import com.sfes.superadmin.account.AccountInvitation;
 import com.sfes.superadmin.account.AccountInvitationRepository;
 import com.sfes.superadmin.account.dto.ActivationResponse;
@@ -24,7 +23,6 @@ public class ActivationService {
     private final TokenService tokenService;
     private final AccountInvitationRepository accountInvitationRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
     private final PasswordService passwordService;
 
     public AccountInvitation verifyInvitation(String token) {
@@ -59,12 +57,9 @@ public class ActivationService {
 
         accountInvitation.setUsedAt(Instant.now());
 
-        String jwtToken = jwtService.generateToken(user.getEmail());
         return new ActivationResponse(
                 user.getEmail(),
-                user.getRole(),
-                user.getEmployee().getFirstName(),
-                jwtToken
+                user.getEmployee().getFirstName()
         );
     }
 }
