@@ -24,6 +24,8 @@ public class SuccessfulActivationService {
 
     @Async
     public void sendSuccessActivation(String email, String firstName){
+        String loginUrl = frontendUrl + "/login";
+
         EmailContext emailContext = new EmailContext(
                 from,
                 email,
@@ -31,7 +33,7 @@ public class SuccessfulActivationService {
                 "email/successful-activation",
                 Map.of(
                         "name", firstName,
-                        "loginUrl", frontendUrl
+                        "loginUrl", loginUrl
                 )
         );
 
