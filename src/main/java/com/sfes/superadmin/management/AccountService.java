@@ -19,13 +19,13 @@ import java.util.List;
 public class AccountService {
     private final EmployeeRepository employeeRepository;
 
-    public AccountsResponse getAccounts(Role type) {
+    public AccountsResponse getAccounts(Role role) {
         List<AccountsResponse.Account> accounts =
                 employeeRepository.findAll()
                         .stream()
                         .filter(employee -> employee.getUser().getRole() != Role.SUPER_ADMIN)
                         .filter(employee ->
-                                type == null || employee.getUser().getRole() == type)
+                                role == null || employee.getUser().getRole() == role)
                         .sorted(Comparator.comparing(Employee::getCreatedAt,
                                 Comparator.reverseOrder()))
                         .map(employee -> new AccountsResponse.Account(
