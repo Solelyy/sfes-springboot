@@ -14,11 +14,11 @@ public class AccountsManagementController {
 
     @GetMapping("/accounts")
     public ApiResponse<AccountsResponse> getAllAccounts(
-            @RequestParam(required = false) Role type
+            @RequestParam(required = false) Role role
     ) {
         return new ApiResponse<>(
                 "Successfully retrieved accounts",
-                accountService.getAccounts(type)
+                accountService.getAccounts(role)
         );
     }
 
