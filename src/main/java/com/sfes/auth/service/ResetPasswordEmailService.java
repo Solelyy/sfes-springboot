@@ -43,7 +43,7 @@ public class ResetPasswordEmailService {
     }
 
     private String buildResetPasswordLink(String resetPasswordToken) {
-        return frontendUrl + "/reset-password?token=" + resetPasswordToken;
+        return frontendUrl + "/forgot-password/reset?token=" + resetPasswordToken;
     }
 
     @Async
