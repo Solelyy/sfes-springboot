@@ -33,14 +33,14 @@ public class ResetPasswordController {
         );
     }
 
-    @GetMapping("/email/{token}")
+    @GetMapping("/{token}")
     public ApiMessage verifyResetPasswordToken(@PathVariable String token){
         resetPasswordService.verifyResetPasswordToken(token);
 
         return new ApiMessage("Valid reset password token");
     }
 
-    @PatchMapping("/email/{token}/reset")
+    @PatchMapping("/{token}/reset")
     public ApiMessage resetPassword(@PathVariable String token, @RequestBody ActivationRequest request) {
         ResetPasswordResponse result = resetPasswordService.resetPassword(
                 token,
