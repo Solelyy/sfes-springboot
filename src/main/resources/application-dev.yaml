@@ -29,8 +29,9 @@ jwt:
 
 logging:
   level:
+    com.sfes: DEBUG
     org.springframework.boot.context.config: DEBUG
-    org.hibernate.orm.jdbc.bind: TRACE
+#    org.hibernate.orm.jdbc.bind: TRACE
 
 invitation:
   expiration: 3600000
