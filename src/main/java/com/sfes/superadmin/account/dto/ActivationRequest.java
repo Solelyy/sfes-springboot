@@ -10,6 +10,9 @@ public record ActivationRequest (
 
       @NotBlank
       @Size(min = 8, max = 72)
-      String confirmPassword
+      String confirmPassword,
+
+      @NotBlank
+      String token
 )
 {}
