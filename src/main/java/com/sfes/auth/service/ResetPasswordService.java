@@ -122,9 +122,12 @@ public class ResetPasswordService {
 
         Instant now = Instant.now();
 
-        passwordService.checkPasswordsMatch(password, confirmPassword);
+        if (passwordEncoder.matches(password, user.getHashedPassword())) {
+            throw new InvalidRequestException("New password cannot be the same as current password");
+        }
 
         String hashedPassword = passwordEncoder.encode(password);
+        passwordService.checkPasswordsMatch(password, confirmPassword);
 
         user.setPasswordChangedAt(now);
         user.setUpdatedAt(now);
