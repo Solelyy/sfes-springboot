@@ -31,5 +31,15 @@ jwt:
   expiration: 86400000
 
 bucket:
-  capacity: 30
-  refill: 10
+  limits:
+    general:
+      capacity: 60
+      refill: 20
+
+    login:
+      capacity: 30
+      refill: 10
+
+    password-reset:
+      capacity: 10
+      refill: 5
