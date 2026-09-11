@@ -18,7 +18,7 @@ public class ActivationController {
     private final ActivationService activationService;
     private final SuccessfulActivationService successfulActivationService;
 
-    @GetMapping("/{token}")
+    @GetMapping("/verify/{token}")
     public VerifyInvitationResponse verifyInvitation(@PathVariable String token) {
         AccountInvitation invitation = activationService.verifyInvitation(token);
 
@@ -28,10 +28,10 @@ public class ActivationController {
         );
     }
 
-    @PostMapping("/{token}/activation")
-    public ApiMessage activateAccount(@PathVariable String token, @Valid @RequestBody ActivationRequest request) {
+    @PostMapping("/activation")
+    public ApiMessage activateAccount(@Valid @RequestBody ActivationRequest request) {
         ActivationResponse result = activationService.activateAccount(
-                token, request.password(), request.confirmPassword()
+                request.token(), request.password(), request.confirmPassword()
         );
 
         successfulActivationService.sendSuccessActivation(result.email(), result.firstName());
