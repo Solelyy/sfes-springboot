@@ -31,7 +31,7 @@ public class AuthService {
 
     public AuthResult login(String email, String password) {
         User user = authenticate(email, password);
-        String token = jwtService.generateToken(user.getEmail());
+        String token = jwtService.generateToken(user.getEmail(), user.getTokenVersion());
 
         return new AuthResult(user, token);
     }
@@ -83,6 +83,7 @@ public class AuthService {
         user.setFailedLoginAttempts(0);
         user.setLockedUntil(null);
         user.setLastLogin(now);
+        user.setTokenVersion(user.getTokenVersion() + 1);
 
         userRepository.save(user);
 

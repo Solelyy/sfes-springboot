@@ -64,5 +64,6 @@ public class AccountService {
         }
 
         user.setStatus(newStatus);
+        user.setTokenVersion(user.getTokenVersion() + 1);
     }
 }

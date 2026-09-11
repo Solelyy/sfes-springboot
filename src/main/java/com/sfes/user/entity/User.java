@@ -48,4 +48,7 @@ public class User extends BaseEntity {
 
     @Column(name = "password_changed_at")
     private Instant passwordChangedAt;
+
+    @Column(name = "token_version", nullable = false)
+    private int tokenVersion = 0;
 }

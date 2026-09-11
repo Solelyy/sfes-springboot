@@ -1,6 +1,9 @@
 package com.sfes.security.jwt;
 
 import com.sfes.security.user.CustomUserDetailsService;
+import com.sfes.user.entity.User;
+import com.sfes.user.enums.Status;
+import com.sfes.user.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -23,6 +26,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final CustomUserDetailsService customerUserDetailsService;
+    private final UserRepository userRepository;
 
     @Override
     protected void doFilterInternal(
@@ -34,7 +38,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String token = null;
         String email = null;
 
-        // 1. Find JWT in cookies
+        // 1. Find jwt in cookies
         if (request.getCookies() != null) {
 
             for (Cookie cookie : request.getCookies()) {
@@ -55,10 +59,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 // 3. Extract email from JWT
                 email = jwtService.extractEmail(token);
 
-                // 4. Validate JWT
-                if (email != null &&
-                        jwtService.isTokenValid(token, email)) {
-                    ;
+                User user = userRepository.findByEmail(email)
+                        .orElse(null);
+
+                Integer jwtVersion = jwtService.extractTokenVersion(token);
+
+                // 4. Validate token version, status, and token
+                if (user != null
+                        && user.getTokenVersion() == jwtVersion
+                        && user.getStatus() == Status.ACTIVE
+                        && jwtService.isTokenValid(token, email)
+                ) {
 
                     // 5. Load Spring Security UserDetails
                     var userDetails =
