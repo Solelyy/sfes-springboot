@@ -21,6 +21,7 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthenticationFilter;
     private final IpRateLimitFilter ipRateLimitFilter;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -73,6 +74,10 @@ public class SecurityConfig {
 
                         // everything else requires authentication
                         .anyRequest().authenticated()
+                )
+
+                .exceptionHandling(exception -> exception
+                        .authenticationEntryPoint(authenticationEntryPoint)
                 )
 
                 // 5. Disable default Spring login form
