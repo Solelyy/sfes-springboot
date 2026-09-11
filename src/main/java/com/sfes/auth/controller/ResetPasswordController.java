@@ -1,11 +1,11 @@
 package com.sfes.auth.controller;
 
+import com.sfes.auth.dto.PasswordResetRequest;
 import com.sfes.auth.dto.ResetPasswordResponse;
 import com.sfes.auth.dto.VerifyEmailRequest;
 import com.sfes.auth.service.ResetPasswordEmailService;
 import com.sfes.auth.service.ResetPasswordService;
 import com.sfes.common.classes.ApiMessage;
-import com.sfes.superadmin.account.dto.ActivationRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -33,17 +33,17 @@ public class ResetPasswordController {
         );
     }
 
-    @GetMapping("/email/{token}")
+    @GetMapping("/verify/{token}")
     public ApiMessage verifyResetPasswordToken(@PathVariable String token){
         resetPasswordService.verifyResetPasswordToken(token);
 
         return new ApiMessage("Valid reset password token");
     }
 
-    @PatchMapping("/email/{token}/reset")
-    public ApiMessage resetPassword(@PathVariable String token, @RequestBody ActivationRequest request) {
+    @PostMapping("/reset")
+    public ApiMessage resetPassword(@Valid @RequestBody PasswordResetRequest request) {
         ResetPasswordResponse result = resetPasswordService.resetPassword(
-                token,
+                request.token(),
                 request.password(),
                 request.confirmPassword()
         );
