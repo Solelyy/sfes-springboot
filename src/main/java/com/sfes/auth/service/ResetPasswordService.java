@@ -132,6 +132,7 @@ public class ResetPasswordService {
         user.setPasswordChangedAt(now);
         user.setUpdatedAt(now);
         user.setHashedPassword(hashedPassword);
+        user.setTokenVersion(user.getTokenVersion() + 1);
 
         resetPassword.setUsedAt(now);
 
