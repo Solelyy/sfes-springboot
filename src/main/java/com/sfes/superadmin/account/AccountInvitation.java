@@ -16,8 +16,8 @@ import java.time.Instant;
 @Entity
 @Table(name = "account_invitation")
 public class AccountInvitation extends BaseEntity {
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(name = "token_hashed", nullable = false, unique = true, length = 70)
