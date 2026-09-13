@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/superadmin/")
+@RequestMapping("/superadmin")
 @RequiredArgsConstructor
 public class RegisterController {
     private final RegisterService registerService;
