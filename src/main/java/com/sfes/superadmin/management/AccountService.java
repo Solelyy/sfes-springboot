@@ -4,6 +4,7 @@ import com.sfes.common.exceptions.AccountNotFoundException;
 import com.sfes.common.exceptions.InvalidRequestException;
 import com.sfes.employee.entity.Employee;
 import com.sfes.employee.repository.EmployeeRepository;
+import com.sfes.superadmin.account.AccountInvitationRepository;
 import com.sfes.user.entity.User;
 import com.sfes.user.enums.Role;
 import com.sfes.user.enums.Status;
@@ -11,6 +12,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
 
@@ -18,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AccountService {
     private final EmployeeRepository employeeRepository;
+    private final AccountInvitationRepository accountInvitationRepository;
 
     public AccountsResponse getAccounts(Role role) {
         List<AccountsResponse.Account> accounts =
@@ -58,6 +61,14 @@ public class AccountService {
                     "Cannot change account status from %s to %s"
                             .formatted(currentStatus, newStatus)
             );
+        }
+
+        if (currentStatus == Status.PENDING && newStatus == Status.REMOVED) {
+            accountInvitationRepository
+                    .findTopByUserOrderByCreatedAtDesc(user)
+                    .ifPresent(invitation -> {
+                        invitation.setRevokedAt(Instant.now());
+                    });
         }
 
         user.setStatus(newStatus);

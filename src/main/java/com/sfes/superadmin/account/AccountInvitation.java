@@ -31,4 +31,7 @@ public class AccountInvitation extends BaseEntity {
 
     @Version
     private Integer version;
+
+    @Column(name = "revoked_at")
+    private Instant revokedAt;
 }

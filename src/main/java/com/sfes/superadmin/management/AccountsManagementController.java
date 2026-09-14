@@ -22,12 +22,10 @@ public class AccountsManagementController {
         );
     }
 
-    @PatchMapping("/accounts/{employeeId}/status")
-    public ApiMessage updateAccountStatus(
-            @PathVariable String employeeId,
-            @RequestBody UpdateStatusRequest request)
+    @PatchMapping("/accounts/update")
+    public ApiMessage updateAccountStatus(@RequestBody UpdateStatusRequest request)
     {
-        accountService.updateAccountStatus(employeeId, request.status());
-        return new ApiMessage("Account status successfully updated");
+        accountService.updateAccountStatus(request.employeeId(), request.status());
+        return new ApiMessage("Account status updated successfully");
     }
 }
