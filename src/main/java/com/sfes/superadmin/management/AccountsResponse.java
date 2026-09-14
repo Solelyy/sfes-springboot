@@ -3,6 +3,7 @@ package com.sfes.superadmin.management;
 import com.sfes.user.enums.Role;
 import com.sfes.user.enums.Status;
 
+import java.time.Instant;
 import java.util.List;
 
 public record AccountsResponse(
@@ -15,6 +16,7 @@ public record AccountsResponse(
             String middleName,
             String lastName,
             Role role,
-            Status status
+            Status status,
+            Instant expiredAt
     ) {}
 }
