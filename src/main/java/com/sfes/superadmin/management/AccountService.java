@@ -21,24 +21,21 @@ public class AccountService {
 
     public AccountsResponse getAccounts(Role role) {
         List<AccountsResponse.Account> accounts =
-                employeeRepository.findAll()
+                employeeRepository.findAccounts(role)
                         .stream()
-                        .filter(employee -> employee.getUser().getRole() != Role.SUPER_ADMIN)
-                        .filter(employee ->
-                                role == null || employee.getUser().getRole() == role)
-                        .sorted(Comparator.comparing(Employee::getCreatedAt,
-                                Comparator.reverseOrder()))
-                        .map(employee -> new AccountsResponse.Account(
-                                employee.getEmployeeId(),
-                                employee.getUser().getEmail(),
-                                employee.getFirstName(),
-                                employee.getMiddleName(),
-                                employee.getLastName(),
-                                employee.getUser().getRole(),
-                                employee.getUser().getStatus()
+                        .map(account -> new AccountsResponse.Account(
+                                account.getEmployeeId(),
+                                account.getEmail(),
+                                account.getFirstName(),
+                                account.getMiddleName(),
+                                account.getLastName(),
+                                account.getRole(),
+                                account.getStatus(),
+                                account.getStatus() == Status.PENDING
+                                        ? account.getExpiresAt()
+                                        : null
                         ))
                         .toList();
-
         return new AccountsResponse(accounts);
     }
 
