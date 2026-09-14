@@ -33,6 +33,10 @@ public class ActivationService {
 
         Instant now = Instant.now();
 
+        if (invitation.getRevokedAt() != null) {
+            throw new InvalidRequestException("Invalid invitation");
+        }
+
         if (invitation.getUsedAt() != null) {
             throw new InvalidTokenException("Account already activated");
         }
