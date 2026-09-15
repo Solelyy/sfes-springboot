@@ -16,7 +16,7 @@ public class RegisterController {
     private final RegisterService registerService;
     private final EmailActivationService emailActivationService;
 
-    @PostMapping("/register")
+    @PostMapping("/accounts")
     public ResponseEntity<ApiMessage> registerAccount(@Valid  @RequestBody RegisterRequest request) {
         String rawToken = registerService.registerUser(request);
 

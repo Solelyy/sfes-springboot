@@ -28,7 +28,7 @@ public class ActivationController {
         );
     }
 
-    @PostMapping("/activation/{token}")
+    @PostMapping("/activate/{token}")
     public ApiMessage activateAccount(@PathVariable String token, @Valid @RequestBody ActivationRequest request) {
         ActivationResponse result = activationService.activateAccount(
                 token, request.password(), request.confirmPassword()

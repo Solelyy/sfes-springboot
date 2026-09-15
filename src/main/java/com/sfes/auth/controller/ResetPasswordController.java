@@ -17,7 +17,7 @@ public class ResetPasswordController {
     private final ResetPasswordService resetPasswordService;
     private final ResetPasswordEmailService emailService;
 
-    @PostMapping("/email")
+    @PostMapping
     public ApiMessage sendResetPasswordEmail(@Valid @RequestBody VerifyEmailRequest request) {
         ResetPasswordResponse result = resetPasswordService
                 .createResetPasswordRequest(request.email());

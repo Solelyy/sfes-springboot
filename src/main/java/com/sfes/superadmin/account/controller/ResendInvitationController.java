@@ -19,7 +19,7 @@ public class ResendInvitationController {
     private final EmailActivationService emailActivationService;
     private final ResendInvitationService resendInvitationService;
 
-    @PostMapping("/resend-invitation")
+    @PostMapping("/invitations/resend")
     public ApiMessage resendInvitation(@Valid @RequestBody ResendInvitation request) {
         ResendInvitationResponse result =
                 resendInvitationService.resendInvitation(request.employeeId());
