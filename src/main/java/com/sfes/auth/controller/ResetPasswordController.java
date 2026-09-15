@@ -41,9 +41,9 @@ public class ResetPasswordController {
     }
 
     @PostMapping("/reset")
-    public ApiMessage resetPassword(@Valid @RequestBody PasswordResetRequest request) {
+    public ApiMessage resetPassword(@PathVariable String token, @Valid @RequestBody PasswordResetRequest request) {
         ResetPasswordResponse result = resetPasswordService.resetPassword(
-                request.token(),
+                token,
                 request.password(),
                 request.confirmPassword()
         );
