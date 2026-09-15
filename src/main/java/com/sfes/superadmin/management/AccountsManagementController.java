@@ -22,7 +22,7 @@ public class AccountsManagementController {
         );
     }
 
-    @PatchMapping("/accounts/update")
+    @PatchMapping("/accounts/status")
     public ApiMessage updateAccountStatus(@RequestBody UpdateStatusRequest request)
     {
         accountService.updateAccountStatus(request.employeeId(), request.status());

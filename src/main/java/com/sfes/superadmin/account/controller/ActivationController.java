@@ -28,10 +28,10 @@ public class ActivationController {
         );
     }
 
-    @PostMapping("/activation")
-    public ApiMessage activateAccount(@Valid @RequestBody ActivationRequest request) {
+    @PostMapping("/activate/{token}")
+    public ApiMessage activateAccount(@PathVariable String token, @Valid @RequestBody ActivationRequest request) {
         ActivationResponse result = activationService.activateAccount(
-                request.token(), request.password(), request.confirmPassword()
+                token, request.password(), request.confirmPassword()
         );
 
         successfulActivationService.sendSuccessActivation(result.email(), result.firstName());
