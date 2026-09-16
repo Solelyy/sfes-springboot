@@ -1,6 +1,6 @@
-package com.sfes.registrar.department;
+package com.sfes.registrar;
 
-public enum DepartmentStatus {
+public enum Status {
     ACTIVE,
     INACTIVE
 }

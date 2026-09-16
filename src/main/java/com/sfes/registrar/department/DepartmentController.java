@@ -24,7 +24,7 @@ public class DepartmentController {
 
     @PatchMapping("/departments/{departmentCode}")
     public ApiMessage updateDepartmentStatus(@PathVariable String departmentCode, @Valid @RequestBody UpdateDepartment request) {
-        departmentService.updateDeptStatus(departmentCode, request.departmentStatus());
+        departmentService.updateDeptStatus(departmentCode, request.status());
 
         return new ApiMessage("Department status updated successfully");
     }

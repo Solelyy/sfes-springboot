@@ -1,6 +1,6 @@
 package com.sfes.registrar.department.dto;
 
-import com.sfes.registrar.department.DepartmentStatus;
+import com.sfes.registrar.Status;
 
 import java.util.List;
 
@@ -10,6 +10,6 @@ public record DepartmentResponse (
     public record DepartmentDto(
             String departmentName,
             String departmentCode,
-            DepartmentStatus status
+            Status status
     ){}
 }
