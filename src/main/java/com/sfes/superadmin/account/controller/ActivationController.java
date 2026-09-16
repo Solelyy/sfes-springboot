@@ -1,10 +1,9 @@
 package com.sfes.superadmin.account.controller;
 
 import com.sfes.common.classes.ApiMessage;
-import com.sfes.superadmin.account.AccountInvitation;
+import com.sfes.common.classes.ApiResponse;
 import com.sfes.superadmin.account.dto.ActivationRequest;
 import com.sfes.superadmin.account.dto.ActivationResponse;
-import com.sfes.superadmin.account.dto.VerifyInvitationResponse;
 import com.sfes.superadmin.account.service.ActivationService;
 import com.sfes.superadmin.account.service.SuccessfulActivationService;
 import jakarta.validation.Valid;
@@ -19,12 +18,12 @@ public class ActivationController {
     private final SuccessfulActivationService successfulActivationService;
 
     @GetMapping("/verify/{token}")
-    public VerifyInvitationResponse verifyInvitation(@PathVariable String token) {
-        AccountInvitation invitation = activationService.verifyInvitation(token);
+    public ApiResponse<String> verifyInvitation(@PathVariable String token) {
+        String email = activationService.verifyInvitation(token);
 
-        return new VerifyInvitationResponse(
+        return new ApiResponse<>(
                 "Invitation is valid",
-                invitation.getUser().getEmail()
+                email
         );
     }
 

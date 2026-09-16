@@ -36,7 +36,7 @@ public class AuthService {
         User user = authenticate(normalizedEmail, password);
         String token = jwtService.generateToken(user.getEmail(), user.getTokenVersion());
 
-        return new AuthResult(user, token);
+        return new AuthResult(user.getEmail(), user.getRole(), token);
     }
 
     private User authenticate(String email, String password) {
