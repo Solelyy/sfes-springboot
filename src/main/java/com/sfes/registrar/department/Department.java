@@ -1,6 +1,7 @@
 package com.sfes.registrar.department;
 
 import com.sfes.common.classes.BaseEntity;
+import com.sfes.registrar.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,5 +22,5 @@ public class Department extends BaseEntity {
 
     @Column(name = "dept_status")
     @Enumerated(EnumType.STRING)
-    private DepartmentStatus departmentStatus;
+    private Status status;
 }

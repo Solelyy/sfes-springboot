@@ -10,26 +10,26 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/registrar")
+@RequestMapping("/registrar/departments")
 @RequiredArgsConstructor
 public class DepartmentController {
     private final DepartmentService departmentService;
 
-    @PostMapping("/departments")
+    @PostMapping
     public ApiMessage createDepartment(@Valid @RequestBody CreateDepartment request) {
         departmentService.createDepartment(request.departmentName(), request.departmentCode());
 
         return  new ApiMessage("Department created successfully");
     }
 
-    @PatchMapping("/departments/{departmentCode}")
+    @PatchMapping("/{departmentCode}")
     public ApiMessage updateDepartmentStatus(@PathVariable String departmentCode, @Valid @RequestBody UpdateDepartment request) {
-        departmentService.updateDeptStatus(departmentCode, request.departmentStatus());
+        departmentService.updateDeptStatus(departmentCode, request.status());
 
         return new ApiMessage("Department status updated successfully");
     }
 
-    @GetMapping("/departments")
+    @GetMapping
     public ApiResponse<DepartmentResponse> getDepartments() {
         return new ApiResponse<>(
                 "Retrieved departments successfully",

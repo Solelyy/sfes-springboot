@@ -1,6 +1,7 @@
 package com.sfes.registrar.department;
 
 import com.sfes.common.exceptions.InvalidRequestException;
+import com.sfes.registrar.Status;
 import com.sfes.registrar.department.dto.DepartmentResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -29,22 +30,22 @@ public class DepartmentService {
         Department department = Department.builder()
                 .departmentName(sanitizedDeptName)
                 .departmentCode(sanitizedDeptCode)
-                .departmentStatus(DepartmentStatus.ACTIVE)
+                .status(Status.ACTIVE)
                 .build();
 
         departmentRepository.save(department);
     }
 
     @Transactional
-    public void updateDeptStatus(String deptCode, DepartmentStatus departmentStatus) {
+    public void updateDeptStatus(String deptCode, Status status) {
         Department department = departmentRepository.findByDepartmentCode(deptCode)
                 .orElseThrow(() -> new InvalidRequestException("Department does not exist"));
 
-        if (department.getDepartmentStatus() == departmentStatus) {
+        if (department.getStatus() == status) {
             throw new InvalidRequestException("Unable to change to current status");
         }
 
-        department.setDepartmentStatus(departmentStatus);
+        department.setStatus(status);
     }
 
     public DepartmentResponse getDepartments() {
@@ -54,7 +55,7 @@ public class DepartmentService {
                         .map(dept -> new DepartmentResponse.DepartmentDto(
                                 dept.getDepartmentName(),
                                 dept.getDepartmentCode(),
-                                dept.getDepartmentStatus()
+                                dept.getStatus()
                         ))
                         .toList();
 

@@ -3,7 +3,7 @@ package com.sfes.superadmin.account.service;
 import com.sfes.common.exceptions.ExpiredTokenException;
 import com.sfes.common.exceptions.InvalidTokenException;
 import com.sfes.common.exceptions.InvalidRequestException;
-import com.sfes.common.utility.PasswordService;
+import com.sfes.common.utility.PasswordUtil;
 import com.sfes.common.utility.TokenService;
 import com.sfes.superadmin.account.AccountInvitation;
 import com.sfes.superadmin.account.AccountInvitationRepository;
@@ -23,7 +23,6 @@ public class ActivationService {
     private final TokenService tokenService;
     private final AccountInvitationRepository accountInvitationRepository;
     private final PasswordEncoder passwordEncoder;
-    private final PasswordService passwordService;
 
     public AccountInvitation verifyInvitation(String token) {
         String hashedToken = tokenService.hashToken(token);
@@ -53,7 +52,7 @@ public class ActivationService {
         AccountInvitation accountInvitation = verifyInvitation(token);
         User user = accountInvitation.getUser();
 
-        passwordService.checkPasswordsMatch(password, confirmPassword);
+        PasswordUtil.checkPasswordsMatch(password, confirmPassword);
 
         String hashedPassword = passwordEncoder.encode(password);
         user.setHashedPassword(hashedPassword);
