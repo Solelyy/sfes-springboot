@@ -27,7 +27,6 @@ public class ResetPasswordService {
     private final UserRepository userRepository;
     private final TokenService tokenService;
     private final ResetPasswordRepository resetPasswordRepository;
-    private final PasswordUtil passwordutil;
     private final PasswordEncoder passwordEncoder;
 
     @Value("${reset-password.expiration}")
@@ -127,7 +126,7 @@ public class ResetPasswordService {
         }
 
         String hashedPassword = passwordEncoder.encode(password);
-        passwordutil.checkPasswordsMatch(password, confirmPassword);
+        PasswordUtil.checkPasswordsMatch(password, confirmPassword);
 
         user.setPasswordChangedAt(now);
         user.setUpdatedAt(now);
