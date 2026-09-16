@@ -2,7 +2,7 @@ package com.sfes.auth.service;
 
 import com.sfes.auth.dto.ResetPasswordResponse;
 import com.sfes.common.exceptions.*;
-import com.sfes.common.utility.PasswordService;
+import com.sfes.common.utility.PasswordUtil;
 import com.sfes.common.utility.TokenService;
 import com.sfes.user.entity.ResetPassword;
 import com.sfes.user.entity.User;
@@ -27,7 +27,7 @@ public class ResetPasswordService {
     private final UserRepository userRepository;
     private final TokenService tokenService;
     private final ResetPasswordRepository resetPasswordRepository;
-    private final PasswordService passwordService;
+    private final PasswordUtil passwordutil;
     private final PasswordEncoder passwordEncoder;
 
     @Value("${reset-password.expiration}")
@@ -127,7 +127,7 @@ public class ResetPasswordService {
         }
 
         String hashedPassword = passwordEncoder.encode(password);
-        passwordService.checkPasswordsMatch(password, confirmPassword);
+        passwordutil.checkPasswordsMatch(password, confirmPassword);
 
         user.setPasswordChangedAt(now);
         user.setUpdatedAt(now);
