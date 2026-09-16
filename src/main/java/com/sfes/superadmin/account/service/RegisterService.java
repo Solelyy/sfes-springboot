@@ -2,6 +2,7 @@ package com.sfes.superadmin.account.service;
 
 import com.sfes.common.exceptions.AccountAlreadyExistsException;
 import com.sfes.common.exceptions.InvalidAccountRoleException;
+import com.sfes.common.utility.NormalizationUtil;
 import com.sfes.common.utility.TokenService;
 import com.sfes.employee.entity.Employee;
 import com.sfes.employee.repository.EmployeeRepository;
@@ -32,27 +33,30 @@ public class RegisterService {
 
     @Transactional
     public String registerUser(RegisterRequest request) {
+        String normalizedEmployeeId = NormalizationUtil.normalizeToEmployeeId(request.employeeId());
+        String normalizedEmail = NormalizationUtil.normalizeToLowerCase(request.email());
+
         if (request.role() != Role.GUIDANCE && request.role() !=Role.REGISTRAR) {
             throw new InvalidAccountRoleException("Only Registrar and Guidance accounts can be created.");
         }
 
-        if (employeeRepository.findByEmployeeId(request.employeeId()).isPresent()) {
+        if (employeeRepository.findByEmployeeId(normalizedEmployeeId).isPresent()) {
             throw new AccountAlreadyExistsException("Employee ID already exists.");
         }
 
-        if (userRepository.findByEmail(request.email()).isPresent()) {
+        if (userRepository.findByEmail(normalizedEmail).isPresent()) {
             throw new AccountAlreadyExistsException("Email already exists.");
         }
 
         User user = User.builder()
-                .email(request.email())
+                .email(normalizedEmail)
                 .role(request.role())
                 .status(Status.PENDING)
                 .build();
         userRepository.save(user);
 
         Employee employee = Employee.builder()
-                .employeeId(request.employeeId())
+                .employeeId(normalizedEmployeeId)
                 .firstName(request.firstName())
                 .middleName(request.middleName())
                 .lastName(request.lastName())

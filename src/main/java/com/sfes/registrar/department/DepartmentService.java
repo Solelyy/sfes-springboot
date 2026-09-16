@@ -1,6 +1,7 @@
 package com.sfes.registrar.department;
 
 import com.sfes.common.exceptions.InvalidRequestException;
+import com.sfes.common.utility.NormalizationUtil;
 import com.sfes.registrar.Status;
 import com.sfes.registrar.department.dto.DepartmentResponse;
 import jakarta.transaction.Transactional;
@@ -16,20 +17,20 @@ public class DepartmentService {
 
     @Transactional
     public void createDepartment(String departmentName, String departmentCode) {
-        String sanitizedDeptName = departmentName.toUpperCase().trim();
-        String sanitizedDeptCode = departmentCode.toUpperCase().trim();
+        String normalizedDeptName = NormalizationUtil.normalizeToUpperCase(departmentName);
+        String normalizedDeptCode = NormalizationUtil.normalizeToUpperCase(departmentCode);
 
-        if (departmentRepository.findByDepartmentName(sanitizedDeptName).isPresent()) {
+        if (departmentRepository.findByDepartmentName(normalizedDeptName).isPresent()) {
             throw new InvalidRequestException("Department name already exists");
         }
 
-        if (departmentRepository.findByDepartmentCode(sanitizedDeptCode).isPresent()) {
+        if (departmentRepository.findByDepartmentCode(normalizedDeptCode).isPresent()) {
             throw new InvalidRequestException("Department code already exists");
         }
 
         Department department = Department.builder()
-                .departmentName(sanitizedDeptName)
-                .departmentCode(sanitizedDeptCode)
+                .departmentName(normalizedDeptName)
+                .departmentCode(normalizedDeptCode)
                 .status(Status.ACTIVE)
                 .build();
 

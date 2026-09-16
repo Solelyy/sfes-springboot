@@ -1,6 +1,7 @@
 package com.sfes.superadmin.account.service;
 
 import com.sfes.common.exceptions.InvalidRequestException;
+import com.sfes.common.utility.NormalizationUtil;
 import com.sfes.common.utility.TokenService;
 import com.sfes.employee.entity.Employee;
 import com.sfes.employee.repository.EmployeeRepository;
@@ -29,7 +30,9 @@ public class ResendInvitationService {
 
     @Transactional
     public ResendInvitationResponse resendInvitation(String employeeId){
-        Employee employee = employeeRepository.findByEmployeeId(employeeId)
+        String normalizedEmployeeId = NormalizationUtil.normalizeToEmployeeId(employeeId);
+
+        Employee employee = employeeRepository.findByEmployeeId(normalizedEmployeeId)
                 .orElseThrow(() -> new InvalidRequestException("Invalid request"));
 
         User user = employee.getUser();

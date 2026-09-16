@@ -5,6 +5,7 @@ import com.sfes.auth.dto.AuthUser;
 import com.sfes.common.exceptions.AccessDeniedException;
 import com.sfes.common.exceptions.InvalidRequestException;
 import com.sfes.common.exceptions.MaximumLoginAttemptsException;
+import com.sfes.common.utility.NormalizationUtil;
 import com.sfes.employee.entity.Employee;
 import com.sfes.security.jwt.JwtService;
 import com.sfes.user.entity.User;
@@ -30,14 +31,18 @@ public class AuthService {
     private final JwtService jwtService;
 
     public AuthResult login(String email, String password) {
-        User user = authenticate(email, password);
+        String normalizedEmail = NormalizationUtil.normalizeToLowerCase(email);
+
+        User user = authenticate(normalizedEmail, password);
         String token = jwtService.generateToken(user.getEmail(), user.getTokenVersion());
 
         return new AuthResult(user, token);
     }
 
     private User authenticate(String email, String password) {
-        User user = userRepository.findByEmail(email)
+        String normalizedEmail = NormalizationUtil.normalizeToLowerCase(email);
+
+        User user = userRepository.findByEmail(normalizedEmail)
                 .orElseThrow(() ->
                         new BadCredentialsException("Incorrect email or password")
                 );
@@ -91,7 +96,9 @@ public class AuthService {
     }
 
     public AuthUser getAuthUser(String email) {
-        User user = userRepository.findByEmail(email)
+        String normalizedEmail = NormalizationUtil.normalizeToLowerCase(email);
+
+        User user = userRepository.findByEmail(normalizedEmail)
                 .orElseThrow(() -> new InvalidRequestException("Invalid request"));
 
         return new AuthUser(
