@@ -11,13 +11,13 @@ public class ResendEmailTest {
 
     public static void sendEmailActivation() {
 
-        Resend resend = new Resend("re_deMV2UvH_HDebzWw93cASqzkG3kVTuTeW");
+        Resend resend = new Resend("");
 
-        String activationLink = "http://localhost:8080?token=SGVsbG8gV29ybGQh";
+        String activationLink = "";
 
         CreateEmailOptions params = CreateEmailOptions.builder()
-                .from("onboarding@resend.dev")
-                .to("jessanazarenedietagozun@gmail.com")
+                .from("")
+                .to("")
                 .subject("Activate your SFES account")
                 .html("""
                         <h2>Welcome to SFES!</h2>
