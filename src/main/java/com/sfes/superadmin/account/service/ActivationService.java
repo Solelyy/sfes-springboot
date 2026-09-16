@@ -23,7 +23,6 @@ public class ActivationService {
     private final TokenService tokenService;
     private final AccountInvitationRepository accountInvitationRepository;
     private final PasswordEncoder passwordEncoder;
-    private final PasswordUtil passwordutil;
 
     public AccountInvitation verifyInvitation(String token) {
         String hashedToken = tokenService.hashToken(token);
@@ -53,7 +52,7 @@ public class ActivationService {
         AccountInvitation accountInvitation = verifyInvitation(token);
         User user = accountInvitation.getUser();
 
-        passwordutil.checkPasswordsMatch(password, confirmPassword);
+        PasswordUtil.checkPasswordsMatch(password, confirmPassword);
 
         String hashedPassword = passwordEncoder.encode(password);
         user.setHashedPassword(hashedPassword);
