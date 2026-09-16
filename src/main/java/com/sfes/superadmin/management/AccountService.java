@@ -2,6 +2,7 @@ package com.sfes.superadmin.management;
 
 import com.sfes.common.exceptions.AccountNotFoundException;
 import com.sfes.common.exceptions.InvalidRequestException;
+import com.sfes.common.utility.NormalizationUtil;
 import com.sfes.employee.entity.Employee;
 import com.sfes.employee.repository.EmployeeRepository;
 import com.sfes.superadmin.account.AccountInvitationRepository;
@@ -44,10 +45,13 @@ public class AccountService {
 
     @Transactional
     public void updateAccountStatus(String employeeId, Status newStatus) {
-        Employee employee = employeeRepository.findByEmployeeId(employeeId)
-                .orElseThrow(() -> new AccountNotFoundException("Employee do not exists"));
+        String normalizedEmployeeId = NormalizationUtil.normalizeToEmployeeId(employeeId);
+
+        Employee employee = employeeRepository.findByEmployeeId(normalizedEmployeeId)
+                .orElseThrow(() -> new AccountNotFoundException("Employee does not exist"));
 
         User user = employee.getUser();
+
         Status currentStatus = user.getStatus();
 
         if (currentStatus == newStatus) {

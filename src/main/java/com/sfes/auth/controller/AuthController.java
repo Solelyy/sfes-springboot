@@ -39,8 +39,8 @@ public class AuthController {
                 cookieService.createCookie(result.token());
 
         AuthResponse response = new AuthResponse(
-                result.user().getEmail(),
-                result.user().getRole(),
+                result.email(),
+                result.role(),
                 "Login successful"
         );
 

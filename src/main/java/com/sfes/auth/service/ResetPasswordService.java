@@ -2,6 +2,7 @@ package com.sfes.auth.service;
 
 import com.sfes.auth.dto.ResetPasswordResponse;
 import com.sfes.common.exceptions.*;
+import com.sfes.common.utility.NormalizationUtil;
 import com.sfes.common.utility.PasswordUtil;
 import com.sfes.common.utility.TokenService;
 import com.sfes.user.entity.ResetPassword;
@@ -39,7 +40,9 @@ public class ResetPasswordService {
 
     @Transactional
     public ResetPasswordResponse createResetPasswordRequest(String email) {
-        User user = userRepository.findByEmail(email)
+        String normalizedEmail = NormalizationUtil.normalizeToLowerCase(email);
+
+        User user = userRepository.findByEmail(normalizedEmail)
                 .orElse(null);
 
         if (user == null ) {
