@@ -62,10 +62,12 @@ public class SecurityConfig {
 
                 // 4. Route protection rules
                 .authorizeHttpRequests(auth -> auth
-                        // public endpoints (auth)
+                        // public endpoints
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/invitations/**").permitAll()
                         .requestMatchers("/password-resets/**").permitAll()
+
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
 
                         //rbac
                         .requestMatchers("/superadmin/**").hasAuthority("SUPER_ADMIN")
