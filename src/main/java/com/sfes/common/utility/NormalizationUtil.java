@@ -1,9 +1,6 @@
 package com.sfes.common.utility;
 
-import java.util.Arrays;
 import java.util.Locale;
-import java.util.stream.Collectors;
-
 public final class NormalizationUtil {
     private NormalizationUtil() {}
 
