@@ -1,6 +1,8 @@
 package com.sfes.common.utility;
 
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 public final class NormalizationUtil {
     private NormalizationUtil() {}
@@ -27,5 +29,31 @@ public final class NormalizationUtil {
         }
 
         return EMPLOYEE_ID_PREFIX + "-" + normalized;
+    }
+
+    public static String formatName(String name){
+        if (name == null || name.isBlank()  ) {
+            return "";
+        }
+
+         String[] separatedName = name.split("\\s+");
+
+         StringBuilder result = new StringBuilder();
+
+         for(String n : separatedName) {
+             if (n.isEmpty()) {
+                 continue;
+             }
+
+             result.append(n.substring(0,1).toUpperCase(Locale.ROOT)
+                     + n.substring(1).toLowerCase(Locale.ROOT)
+             ).append(" ");
+         }
+
+         return result.toString().trim();
+    }
+
+    public static String normalizeName(String name) {
+        return name.trim().replaceAll("\\+s", " ");
     }
 }
