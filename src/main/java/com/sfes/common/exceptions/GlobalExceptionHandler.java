@@ -10,6 +10,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @Slf4j
 public class GlobalExceptionHandler {
     private static ApiError buildError(HttpStatus status, String message) {
-        return  ApiError.builder()
+        return ApiError.builder()
                 .status(status.value())
                 .message(message)
                 .timestamp(LocalDateTime.now())
@@ -33,42 +34,42 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MaximumLoginAttemptsException.class)
     public ResponseEntity<ApiError> handleMaxLoginAttempts(MaximumLoginAttemptsException ex) {
-        return  ResponseEntity
+        return ResponseEntity
                 .status(HttpStatus.TOO_MANY_REQUESTS)
                 .body(buildError(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage()));
     }
 
     @ExceptionHandler(AccountAlreadyExistsException.class)
     public ResponseEntity<ApiError> handleAccAlreadyExists(AccountAlreadyExistsException ex) {
-        return  ResponseEntity
+        return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(buildError(HttpStatus.CONFLICT, ex.getMessage()));
     }
 
     @ExceptionHandler(InvalidAccountRoleException.class)
     public ResponseEntity<ApiError> handleInvalidAccountRole(InvalidAccountRoleException ex) {
-        return  ResponseEntity
+        return ResponseEntity
                 .status(HttpStatus.UNPROCESSABLE_CONTENT)
                 .body(buildError(HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage()));
     }
 
     @ExceptionHandler(EmailSendingException.class)
     public ResponseEntity<ApiError> handleEmailSending(EmailSendingException ex) {
-        return  ResponseEntity
+        return ResponseEntity
                 .status(HttpStatus.UNPROCESSABLE_CONTENT)
                 .body(buildError(HttpStatus.UNPROCESSABLE_CONTENT, ex.getMessage()));
     }
 
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<ApiError> handleInvalidToken(InvalidTokenException ex) {
-        return  ResponseEntity
+        return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(buildError(HttpStatus.CONFLICT, ex.getMessage()));
     }
 
     @ExceptionHandler(PasswordMismatchException.class)
     public ResponseEntity<ApiError> handlePasswordMismatch(PasswordMismatchException ex) {
-        return  ResponseEntity
+        return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(buildError(HttpStatus.CONFLICT, ex.getMessage()));
     }
@@ -76,7 +77,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
     public ResponseEntity<ApiMessage> handleOptimisticLockingFailure(
             ObjectOptimisticLockingFailureException ex
-    ){
+    ) {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(new ApiMessage("Invitation has already been used"));
@@ -125,16 +126,25 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(FrequentResetPasswordException.class)
     public ResponseEntity<ApiError> handleFrequentResetPassword(FrequentResetPasswordException ex) {
-        return  ResponseEntity
+        return ResponseEntity
                 .status(HttpStatus.TOO_MANY_REQUESTS)
                 .body(buildError(HttpStatus.TOO_MANY_REQUESTS, ex.getMessage()));
     }
 
     @ExceptionHandler(ExpiredTokenException.class)
     public ResponseEntity<ApiError> handleExpiredToken(ExpiredTokenException ex) {
-        return  ResponseEntity
+        return ResponseEntity
                 .status(HttpStatus.GONE)
                 .body(buildError(HttpStatus.GONE, ex.getMessage()));
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ApiError> handleMaxFileUpload(MaxUploadSizeExceededException ex) {
+        return ResponseEntity.badRequest()
+                .body(buildError(
+                        HttpStatus.BAD_REQUEST,
+                        "File is too large. The maximum allowed size is 5MB")
+                );
     }
 
 }

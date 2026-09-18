@@ -1,10 +1,12 @@
-package com.sfes.registrar.faculty;
+package com.sfes.registrar.faculty.service;
 
 import com.sfes.common.exceptions.InvalidRequestException;
 import com.sfes.common.utility.NormalizationUtil;
 import com.sfes.registrar.Status;
 import com.sfes.registrar.department.Department;
 import com.sfes.registrar.department.DepartmentRepository;
+import com.sfes.registrar.faculty.Faculty;
+import com.sfes.registrar.faculty.FacultyRepository;
 import com.sfes.registrar.faculty.dto.FacultyResponse;
 import com.sfes.registrar.faculty.dto.RegisterFacultyRequest;
 import com.sfes.registrar.faculty.dto.UpdateFacultyRequest;
@@ -52,7 +54,7 @@ public class FacultyService {
 
     public FacultyResponse getFaculty(){
         List<FacultyResponse.FacultyDto> facultyList =
-                facultyRepository.findAll()
+                facultyRepository.findAllWithDepartment()
                         .stream()
                         .map((faculty) -> new FacultyResponse.FacultyDto(
                                 faculty.getId(),
