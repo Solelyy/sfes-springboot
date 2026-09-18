@@ -3,17 +3,22 @@ package com.sfes.registrar.faculty;
 import com.sfes.common.classes.ApiMessage;
 import com.sfes.common.classes.ApiResponse;
 import com.sfes.registrar.faculty.dto.FacultyResponse;
+import com.sfes.registrar.faculty.dto.ImportFacultyResponse;
 import com.sfes.registrar.faculty.dto.RegisterFacultyRequest;
 import com.sfes.registrar.faculty.dto.UpdateFacultyRequest;
+import com.sfes.registrar.faculty.service.FacultyService;
+import com.sfes.registrar.faculty.service.ImportFacultyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/registrar/faculty")
 @RequiredArgsConstructor
 public class FacultyController {
     private final FacultyService facultyService;
+    private final ImportFacultyService importFacultyService;
 
     @PostMapping
     public ApiMessage addFacultyMember(@Valid @RequestBody RegisterFacultyRequest request){
@@ -35,5 +40,16 @@ public class FacultyController {
                 "Retrieved faculty members successfully",
                 facultyService.getFaculty()
         );
+    }
+
+    @PostMapping(value = "/import", consumes = "multipart/form-data")
+    public ApiResponse<ImportFacultyResponse> uploadFaculty(
+            @RequestParam("file") MultipartFile file
+    ) {
+
+        return new ApiResponse<>(
+                "Faculty import completed",
+                importFacultyService.importFaculty(file)
+                );
     }
 }

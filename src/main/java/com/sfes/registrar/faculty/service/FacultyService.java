@@ -54,7 +54,7 @@ public class FacultyService {
 
     public FacultyResponse getFaculty(){
         List<FacultyResponse.FacultyDto> facultyList =
-                facultyRepository.findAll()
+                facultyRepository.findAllWithDepartment()
                         .stream()
                         .map((faculty) -> new FacultyResponse.FacultyDto(
                                 faculty.getId(),
