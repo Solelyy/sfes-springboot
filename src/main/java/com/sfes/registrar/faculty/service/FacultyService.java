@@ -52,9 +52,9 @@ public class FacultyService {
         facultyRepository.save(faculty);
     }
 
-    public FacultyResponse getFaculty(){
+    public FacultyResponse getFaculty(String departmentCode){
         List<FacultyResponse.FacultyDto> facultyList =
-                facultyRepository.findAllWithDepartment()
+                facultyRepository.findFaculty(departmentCode)
                         .stream()
                         .map((faculty) -> new FacultyResponse.FacultyDto(
                                 faculty.getId(),
