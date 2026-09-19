@@ -10,6 +10,7 @@ import com.sfes.registrar.faculty.service.FacultyService;
 import com.sfes.registrar.faculty.service.ImportFacultyService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,10 +36,16 @@ public class FacultyController {
     }
 
     @GetMapping
-    public ApiResponse<FacultyResponse> getFaculty(@RequestParam(required = false) String departmentCode){
+    public ApiResponse<FacultyResponse> getFaculty(
+            @RequestParam(defaultValue = "1") int pageNumber,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "EMPLOYEE_ID") SortBy sortBy,
+            @RequestParam(defaultValue = "ASC")Sort.Direction sortDirection,
+            @RequestParam(required = false) String departmentCode
+    ){
         return new ApiResponse<>(
                 "Retrieved faculty members successfully",
-                facultyService.getFaculty(departmentCode)
+                facultyService.getFaculty(departmentCode, pageNumber, size, sortBy, sortDirection)
         );
     }
 
