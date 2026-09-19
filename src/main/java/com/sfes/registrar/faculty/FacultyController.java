@@ -35,10 +35,10 @@ public class FacultyController {
     }
 
     @GetMapping
-    public ApiResponse<FacultyResponse> getFaculty(){
+    public ApiResponse<FacultyResponse> getFaculty(@RequestParam(required = false) String departmentCode){
         return new ApiResponse<>(
                 "Retrieved faculty members successfully",
-                facultyService.getFaculty()
+                facultyService.getFaculty(departmentCode)
         );
     }
 
