@@ -1,5 +1,6 @@
 package com.sfes.registrar.faculty;
 
+import com.sfes.registrar.Status;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,10 +22,12 @@ public interface FacultyRepository extends JpaRepository<Faculty, Long> {
         SELECT f 
         FROM Faculty f
         JOIN FETCH f.department d
-        WHERE :departmentCode IS NULL OR d.departmentCode = :departmentCode
+        WHERE (:departmentCode IS NULL OR d.departmentCode = :departmentCode)
+        AND (:status IS NULL or f.status = :status)
     """)
     Page<Faculty> findFaculty(
             @Param("departmentCode") String departmentCode,
+            @Param("status") Status status,
             Pageable pageable
     );
 }

@@ -60,12 +60,12 @@ public class FacultyService {
         facultyRepository.save(faculty);
     }
 
-    public FacultyResponse getFaculty(String departmentCode, int pageNumber, int size, SortBy sortBy, Sort.Direction direction){
+    public FacultyResponse getFaculty(String departmentCode, int pageNumber, int size, SortBy sortBy, Sort.Direction direction, Status status){
         Sort sort = Sort.by(direction, sortBy.getProperty()).and(Sort.by("id").ascending());
 
         Pageable pageable = PageRequest.of(pageNumber - 1, size, sort);
 
-        Page<Faculty> result = facultyRepository.findFaculty(departmentCode, pageable);
+        Page<Faculty> result = facultyRepository.findFaculty(departmentCode, status, pageable);
 
         List<FacultyResponse.FacultyDto> facultyList = result.getContent()
                 .stream()
