@@ -1,5 +1,7 @@
 package com.sfes.common.utility;
 
+import com.sfes.common.exceptions.InvalidRequestException;
+
 import java.util.Locale;
 public final class NormalizationUtil {
     private NormalizationUtil() {}
@@ -52,5 +54,23 @@ public final class NormalizationUtil {
 
     public static String normalizeName(String name) {
         return name.trim().replaceAll("\\+s", " ");
+    }
+
+    public static String normalizeStudentId(String studentId) {
+        if (studentId == null || studentId.isBlank()) {
+            throw new InvalidRequestException("Student ID is required");
+        }
+
+        String normalized = studentId.trim();
+
+        if (!normalized.matches("\\d{2}-?\\d+")) {
+            throw new InvalidRequestException("Invalid student ID format");
+        }
+
+        if (!normalized.contains("-")) {
+            normalized = normalized.substring(0, 2) + "-" + normalized.substring(2);
+        }
+
+        return normalized;
     }
 }
