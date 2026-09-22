@@ -21,10 +21,12 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
         SELECT s 
         FROM Student s
         JOIN FETCH s.department d
-        WHERE :departmentCode IS NULL or d.departmentCode = :departmentCode
+        WHERE (:departmentCode IS NULL or d.departmentCode = :departmentCode)
+        AND (:status IS NULL or s.status = :status)
     """)
     Page<Student> findStudents(
             @Param("departmentCode") String departmentCode,
+            @Param("status") StudentStatus status,
             Pageable pageable
     );
 }

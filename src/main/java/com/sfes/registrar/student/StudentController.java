@@ -31,11 +31,12 @@ public class StudentController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "STUDENT_ID") SortBy sortBy,
             @RequestParam(defaultValue = "ASC") Sort.Direction sortDirection,
-            @RequestParam(required = false) String departmentCode
+            @RequestParam(required = false) String departmentCode,
+            @RequestParam(required = false) StudentStatus status
     ){
         return new ApiResponse<>(
                 "Students retrieved successfully",
-                studentService.getStudents(departmentCode, pageNumber, size, sortBy, sortDirection)
+                studentService.getStudents(departmentCode, pageNumber, size, sortBy, sortDirection, status)
         );
     }
 

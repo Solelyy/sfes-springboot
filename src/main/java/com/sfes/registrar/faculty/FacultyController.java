@@ -2,6 +2,7 @@ package com.sfes.registrar.faculty;
 
 import com.sfes.common.classes.ApiMessage;
 import com.sfes.common.classes.ApiResponse;
+import com.sfes.registrar.Status;
 import com.sfes.registrar.faculty.dto.FacultyResponse;
 import com.sfes.registrar.faculty.dto.ImportFacultyResponse;
 import com.sfes.registrar.faculty.dto.RegisterFacultyRequest;
@@ -41,11 +42,12 @@ public class FacultyController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "EMPLOYEE_ID") SortBy sortBy,
             @RequestParam(defaultValue = "ASC")Sort.Direction sortDirection,
-            @RequestParam(required = false) String departmentCode
-    ){
+            @RequestParam(required = false) String departmentCode,
+            @RequestParam(required = false) Status status
+            ){
         return new ApiResponse<>(
                 "Retrieved faculty members successfully",
-                facultyService.getFaculty(departmentCode, pageNumber, size, sortBy, sortDirection)
+                facultyService.getFaculty(departmentCode, pageNumber, size, sortBy, sortDirection, status)
         );
     }
 

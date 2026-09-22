@@ -58,12 +58,12 @@ public class StudentService {
         studentRepository.save(student);
     }
 
-    public StudentResponse getStudents(String departmentCode, int pageNumber, int size, SortBy sortBy, Sort.Direction direction) {
+    public StudentResponse getStudents(String departmentCode, int pageNumber, int size, SortBy sortBy, Sort.Direction direction, StudentStatus status) {
         Sort sort = Sort.by(direction, sortBy.getProperty()).and(Sort.by("id").ascending());
 
         Pageable pageable = PageRequest.of(pageNumber - 1, size, sort);
 
-        Page<Student> result = studentRepository.findStudents(departmentCode, pageable);
+        Page<Student> result = studentRepository.findStudents(departmentCode, status, pageable);
 
         List<StudentResponse.StudentDTO> students = result.getContent()
                 .stream()
