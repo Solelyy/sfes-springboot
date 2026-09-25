@@ -14,6 +14,15 @@ import lombok.*;
 @Entity
 @Table(name = "departments")
 public class Department extends BaseEntity {
+    @Id
+    @SequenceGenerator(
+            name = "departments_seq",
+            sequenceName = "departments_seq",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "departments_seq")
+    private Long id;
+
     @Column(name = "dept_name", unique = true, length = 100)
     private String departmentName;
 

@@ -7,8 +7,8 @@ import com.opencsv.bean.HeaderColumnNameMappingStrategy;
 import com.sfes.common.exceptions.InvalidRequestException;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -35,7 +35,7 @@ public final class CsvUtil {
             List <String> requiredHeaders,
             Class<T> type
     ) throws IOException {
-        try (CSVReader csvReader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
+        try (CSVReader csvReader = new CSVReader(bufferedReader(file.getInputStream()))) {
 
             String[] headerLine = csvReader.peek();
 
@@ -73,5 +73,9 @@ public final class CsvUtil {
 
             return csvToBean.parse();
         }
+    }
+
+    private static Reader bufferedReader(InputStream is) {
+        return new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
     }
 }

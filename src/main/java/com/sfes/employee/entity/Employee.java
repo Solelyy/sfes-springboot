@@ -5,6 +5,8 @@ import com.sfes.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -14,6 +16,16 @@ import lombok.*;
 @Entity
 @Table(name = "employees")
 public class Employee extends BaseEntity {
+    @Id
+    @SequenceGenerator(
+            name = "employee_seq",
+            sequenceName = "employee_seq",
+            initialValue = 2,
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employee_seq")
+    private Long id;
+
     @Column(name = "employee_id", nullable = false, unique = true, length = 30)
     private String employeeId;
 

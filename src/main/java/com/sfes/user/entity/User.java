@@ -17,7 +17,17 @@ import java.time.Instant;
 
 @Entity
 @Table (name = "users")
-public class User extends BaseEntity {
+public class User extends BaseEntity{
+    @Id
+    @SequenceGenerator(
+            name = "user_seq",
+            sequenceName = "user_seq",
+            initialValue = 2,
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
+    private Long id;
+
     @Column(nullable = false, unique = true, length = 255)
     private String email;
 

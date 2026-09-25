@@ -9,14 +9,20 @@ public final class NormalizationUtil {
     private static final String EMPLOYEE_ID_PREFIX = "EMP";
 
     public static String normalizeToUpperCase(String text){
+        if (text == null) return  null;
+
         return text.trim().toUpperCase(Locale.ROOT);
     }
 
     public static String normalizeToLowerCase(String text){
+        if (text == null) return  null;
+
         return text.trim().toLowerCase(Locale.ROOT);
     }
 
     public static String normalizeToEmployeeId(String text) {
+        if (text == null) return  null;
+
         String normalized = text.trim().toUpperCase(Locale.ROOT);
 
         if (normalized.startsWith(EMPLOYEE_ID_PREFIX)) {
@@ -53,7 +59,9 @@ public final class NormalizationUtil {
     }
 
     public static String normalizeName(String name) {
-        return name.trim().replaceAll("\\+s", " ");
+        if (name == null) return null;
+
+        return name.trim().replaceAll("\\s+", " ");
     }
 
     public static String normalizeStudentId(String studentId) {

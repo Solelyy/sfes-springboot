@@ -13,14 +13,17 @@ import com.sfes.registrar.faculty.dto.ImportFacultyResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class ImportFacultyService {
     private final FacultyRepository facultyRepository;
     private final DepartmentRepository departmentRepository;
@@ -35,6 +38,7 @@ public class ImportFacultyService {
                     "Department Code"
             );
 
+    @Transactional
     public ImportFacultyResponse importFaculty(MultipartFile file) {
 
         CsvUtil.validateCsv(file);
@@ -52,7 +56,7 @@ public class ImportFacultyService {
 
              return validateData(normalizedRecords);
         } catch (IOException e) {
-            log.debug("Failed to parse CSV: {}", e.getMessage());
+            log.warn("Failed to parse CSV", e);
             throw new InvalidRequestException("Failed to parse CSV file");
         }
     }
@@ -75,7 +79,37 @@ public class ImportFacultyService {
         List<Faculty> validFaculty = new ArrayList<>();
         List<ImportFacultyResponse.FailedRow> failedRows = new ArrayList<>();
 
+        Set<String> departmentCodesInCsv = records.stream()
+                .map(FacultyCsvRecord::getDepartmentCode)
+                .filter(c -> c !=null && !c.isBlank())
+                .collect(Collectors.toSet());
+
+        Map<String, Department> deptByCode = departmentRepository
+                .findByDepartmentCodeIn(departmentCodesInCsv).stream()
+                .collect(Collectors.toMap(Department::getDepartmentCode, d-> d));
+
+
+
+        Set<String> existingEmployeeIds = new HashSet<>(
+                facultyRepository.findExistingEmployeeIds(
+                        records.stream()
+                                .map(FacultyCsvRecord::getEmployeeId)
+                                .filter(e -> e != null && !e.isBlank())
+                                .collect(Collectors.toSet())
+                )
+        );
+
+        Set<String> existingEmails = new HashSet<>(
+                facultyRepository.findExistingEmails(
+                        records.stream()
+                                .map(FacultyCsvRecord::getEmail)
+                                .filter(e -> e != null && !e.isBlank())
+                                .collect(Collectors.toSet())
+                )
+        );
+
         Set<String> employeeIdsInCsv = new HashSet<>();
+
         Set<String> emailsInCsv = new HashSet<>();
 
         for (int i = 0; i < records.size(); i++) {
@@ -90,10 +124,7 @@ public class ImportFacultyService {
             if (record.getEmployeeId() != null && !record.getEmployeeId().isBlank()) {
                 if (!employeeIdsInCsv.add(record.getEmployeeId())) {
                     errors.add("Employee ID is duplicated in the CSV");
-                } else if (facultyRepository
-                        .findByEmployeeId(record.getEmployeeId())
-                        .isPresent()) {
-
+                } else if (existingEmployeeIds.contains(record.getEmployeeId())){
                     errors.add("Employee ID already exists");
                 }
             }
@@ -101,25 +132,14 @@ public class ImportFacultyService {
             if (record.getEmail() != null && !record.getEmail().isBlank()) {
                 if (!emailsInCsv.add(record.getEmail())) {
                     errors.add("Email is duplicated in the CSV");
-                } else if (facultyRepository
-                        .findByEmail(record.getEmail())
-                        .isPresent()) {
-
+                } else if (existingEmails.contains(record.getEmail())){
                     errors.add("Email already exists");
                 }
             }
 
-            Optional<Department> department = Optional.empty();
-
-            if (record.getDepartmentCode() != null
-                    && !record.getDepartmentCode().isBlank()) {
-
-                department = departmentRepository
-                        .findByDepartmentCode(record.getDepartmentCode());
-
-                if (department.isEmpty()) {
-                    errors.add("Department code does not exist");
-                }
+            Department dept = deptByCode.get(record.getDepartmentCode());
+            if (dept == null) {
+                errors.add("Department code does not exist");
             }
 
             if (!errors.isEmpty()) {
@@ -140,7 +160,7 @@ public class ImportFacultyService {
                     .middleName(record.getMiddleName())
                     .lastName(record.getLastName())
                     .status(Status.ACTIVE)
-                    .department(department.orElseThrow())
+                    .department(dept)
                     .build();
 
             validFaculty.add(faculty);

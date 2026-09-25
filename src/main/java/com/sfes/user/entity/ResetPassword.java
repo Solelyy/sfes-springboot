@@ -15,6 +15,15 @@ import java.time.Instant;
 @Table(name = "reset_password")
 @Entity
 public class ResetPassword extends BaseEntity {
+    @Id
+    @SequenceGenerator(
+            name = "reset_password_seq",
+            sequenceName = "reset_password_seq",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reset_password_seq")
+    private Long id;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
