@@ -14,6 +14,15 @@ import lombok.*;
 @Entity
 @Table(name = "students")
 public class Student extends BaseEntity {
+    @Id
+    @SequenceGenerator(
+            name = "students_seq",
+            sequenceName = "students_seq",
+            allocationSize = 100
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "students_seq")
+    private Long id;
+
     @Column(name = "student_id", unique = true, nullable = false)
     private String studentId;
 

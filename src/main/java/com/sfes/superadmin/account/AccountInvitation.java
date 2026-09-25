@@ -16,6 +16,15 @@ import java.time.Instant;
 @Entity
 @Table(name = "account_invitation")
 public class AccountInvitation extends BaseEntity {
+    @Id
+    @SequenceGenerator(
+            name = "account_inv_seq",
+            sequenceName = "account_inv_seq",
+            allocationSize = 1
+    )
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "account_inv_seq")
+    private Long id;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
