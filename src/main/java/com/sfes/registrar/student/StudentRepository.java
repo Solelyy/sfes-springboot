@@ -6,7 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Collection;
 import java.util.Optional;
+import java.util.Set;
 
 public interface StudentRepository extends JpaRepository<Student, Long> {
     Optional <Student> findByStudentId(String studentId);
@@ -29,4 +31,18 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             @Param("status") StudentStatus status,
             Pageable pageable
     );
+
+    @Query("""
+        SELECT s.studentId 
+        FROM Student s
+        WHERE s.studentId in :studentIds
+    """)
+    Set<String> findExistingStudentIds(@Param("studentIds") Collection<String> studentIds);
+
+    @Query("""
+        SELECT s.email
+        FROM Student s
+        WHERE s.email in :emails
+    """)
+    Set<String> findExistingEmails(@Param("emails") Collection<String> emails);
 }

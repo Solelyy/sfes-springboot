@@ -1,8 +1,11 @@
 package com.sfes.common.utility;
 
 import com.sfes.common.exceptions.InvalidRequestException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Locale;
+
+@Slf4j
 public final class NormalizationUtil {
     private NormalizationUtil() {}
 
@@ -69,7 +72,12 @@ public final class NormalizationUtil {
             throw new InvalidRequestException("Student ID is required");
         }
 
-        String normalized = studentId.trim();
+        log.debug("Student ID: {}", studentId);
+
+        String normalized = studentId.trim()
+                .replaceAll("[\\u2010\\u2011\\u2012\\u2013\\u2014\\u2015\\u2212\\uFF0D]", "-");
+
+        log.debug("Normalized Student ID: {}", normalized);
 
         if (!normalized.matches("\\d{2}-?\\d+")) {
             throw new InvalidRequestException("Invalid student ID format");
@@ -80,5 +88,13 @@ public final class NormalizationUtil {
         }
 
         return normalized;
+    }
+
+    public static String normalizeStudentIdSafe(String studentId) {
+        try {
+            return normalizeStudentId(studentId);
+        } catch (InvalidRequestException e) {
+            return null;
+        }
     }
 }
