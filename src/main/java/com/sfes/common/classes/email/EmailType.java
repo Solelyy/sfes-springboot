@@ -1,6 +1,8 @@
 package com.sfes.common.classes.email;
 
 public enum EmailType {
-    ACCOUNT_INVITATION,
-    RESET_PASSWORD
+    ACTIVATION,
+    PASSWORD_RESET,
+    ACTIVATION_SUCCESS,
+    PASSWORD_RESET_SUCCESS
 }
