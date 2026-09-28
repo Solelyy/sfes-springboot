@@ -1,5 +1,9 @@
 package com.sfes.superadmin.account.service;
 
+import com.sfes.common.classes.email.EmailDelivery;
+import com.sfes.common.classes.email.EmailDeliveryRepository;
+import com.sfes.common.classes.email.EmailStatus;
+import com.sfes.common.classes.email.EmailType;
 import com.sfes.common.exceptions.ExpiredTokenException;
 import com.sfes.common.exceptions.InvalidTokenException;
 import com.sfes.common.exceptions.InvalidRequestException;
@@ -23,6 +27,7 @@ public class ActivationService {
     private final TokenService tokenService;
     private final AccountInvitationRepository accountInvitationRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailDeliveryRepository emailDeliveryRepository;
 
     public String verifyInvitation(String token) {
         String hashedToken = tokenService.hashToken(token);
@@ -65,7 +70,18 @@ public class ActivationService {
 
         accountInvitation.setUsedAt(Instant.now());
 
+        EmailDelivery emailDelivery = EmailDelivery.builder()
+                .accountInvitation(accountInvitation)
+                .recipientEmail(user.getEmail())
+                .emailType(EmailType.ACTIVATION_SUCCESS)
+                .status(EmailStatus.PENDING)
+                .attemptCount(0)
+                .build();
+
+        emailDeliveryRepository.save(emailDelivery);
+
         return new ActivationResponse(
+                emailDelivery.getId(),
                 user.getEmail(),
                 user.getEmployee().getFirstName()
         );
