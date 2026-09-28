@@ -71,11 +71,11 @@ public class ActivationService {
         accountInvitation.setUsedAt(Instant.now());
 
         EmailDelivery emailDelivery = EmailDelivery.builder()
-                .accountInvitation(accountInvitation)
                 .recipientEmail(user.getEmail())
                 .emailType(EmailType.ACTIVATION_SUCCESS)
                 .status(EmailStatus.PENDING)
                 .attemptCount(0)
+                .referenceId(accountInvitation.getId())
                 .build();
 
         emailDeliveryRepository.save(emailDelivery);

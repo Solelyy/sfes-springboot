@@ -81,11 +81,11 @@ public class RegisterService {
         accountInvitationRepository.save(accountInvitation);
 
         EmailDelivery emailDelivery = EmailDelivery.builder()
-                .accountInvitation(accountInvitation)
                 .recipientEmail(user.getEmail())
                 .emailType(EmailType.ACTIVATION)
                 .status(EmailStatus.PENDING)
                 .attemptCount(0)
+                .referenceId(accountInvitation.getId())
                 .build();
 
         emailDeliveryRepository.save(emailDelivery);
