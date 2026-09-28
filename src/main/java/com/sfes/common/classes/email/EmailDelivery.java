@@ -25,10 +25,6 @@ public class EmailDelivery extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "email_delivery_seq")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "account_invitation_id", nullable = false)
-    private AccountInvitation accountInvitation;
-
     @Column(name = "recipient_email", nullable = false)
     private String recipientEmail;
 
@@ -51,4 +47,10 @@ public class EmailDelivery extends BaseEntity {
 
     @Column(name = "last_error", length = 1000)
     private String lastError;
+
+    @Column(name = "next_retry_at")
+    private Instant nextRetryAt;
+
+    @Column(name = "reference_id")
+    private Long referenceId;
 }
