@@ -1,6 +1,9 @@
 package com.sfes.auth.service;
 
 import com.sfes.auth.dto.ResetPasswordResponse;
+import com.sfes.common.classes.email.EmailDelivery;
+import com.sfes.common.classes.email.EmailStatus;
+import com.sfes.common.classes.email.EmailType;
 import com.sfes.common.exceptions.*;
 import com.sfes.common.utility.NormalizationUtil;
 import com.sfes.common.utility.PasswordUtil;
@@ -90,7 +93,15 @@ public class ResetPasswordService {
 
         log.info("Password reset request created");
 
-        return new ResetPasswordResponse(user.getEmail(), user.getEmployee().getFirstName(), rawToken);
+        EmailDelivery emailDelivery = EmailDelivery.builder()
+                .recipientEmail(user.getEmail())
+                .emailType(EmailType.PASSWORD_RESET)
+                .attemptCount(0)
+                .status(EmailStatus.PENDING)
+                .referenceId(resetPassword.getId())
+                .build();
+
+        return new ResetPasswordResponse(emailDelivery.getId(), user.getEmail(), user.getEmployee().getFirstName(), rawToken);
 
     }
 
@@ -138,8 +149,15 @@ public class ResetPasswordService {
 
         resetPassword.setUsedAt(now);
 
+        EmailDelivery emailDelivery = EmailDelivery.builder()
+                .recipientEmail(user.getEmail())
+                .emailType(EmailType.PASSWORD_RESET_SUCCESS)
+                .attemptCount(0)
+                .status(EmailStatus.PENDING)
+                .build();
+
         return new ResetPasswordResponse(
-                user.getEmail(), user.getEmployee().getFirstName()
+                emailDelivery.getId(), user.getEmail(), user.getEmployee().getFirstName()
         );
     }
 }

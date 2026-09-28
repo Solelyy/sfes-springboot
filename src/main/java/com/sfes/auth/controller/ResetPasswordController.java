@@ -24,7 +24,7 @@ public class ResetPasswordController {
 
         if (result != null) {
             emailService.sendResetPasswordEmail(
-                    result.email(), result.firstName(), result.rawToken()
+                    result.emailDeliveryId(), result.email(), result.firstName(), result.rawToken()
             );
         }
 
