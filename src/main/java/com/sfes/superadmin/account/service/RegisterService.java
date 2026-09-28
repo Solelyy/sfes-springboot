@@ -1,5 +1,9 @@
 package com.sfes.superadmin.account.service;
 
+import com.sfes.common.classes.email.EmailDelivery;
+import com.sfes.common.classes.email.EmailDeliveryRepository;
+import com.sfes.common.classes.email.EmailStatus;
+import com.sfes.common.classes.email.EmailType;
 import com.sfes.common.exceptions.AccountAlreadyExistsException;
 import com.sfes.common.exceptions.InvalidAccountRoleException;
 import com.sfes.common.utility.NormalizationUtil;
@@ -9,6 +13,7 @@ import com.sfes.employee.repository.EmployeeRepository;
 import com.sfes.superadmin.account.AccountInvitationRepository;
 import com.sfes.superadmin.account.dto.RegisterRequest;
 import com.sfes.superadmin.account.AccountInvitation;
+import com.sfes.superadmin.account.dto.RegisterResult;
 import com.sfes.user.entity.User;
 import com.sfes.user.enums.Role;
 import com.sfes.user.enums.Status;
@@ -27,12 +32,13 @@ public class RegisterService {
     private final UserRepository userRepository;
     private final TokenService tokenService;
     private final AccountInvitationRepository accountInvitationRepository;
+    private final EmailDeliveryRepository emailDeliveryRepository;
 
     @Value("${invitation.expiration}")
     private long invitationExpiration;
 
     @Transactional
-    public String registerUser(RegisterRequest request) {
+    public RegisterResult registerUser(RegisterRequest request) {
         String normalizedEmployeeId = NormalizationUtil.normalizeToEmployeeId(request.employeeId());
         String normalizedEmail = NormalizationUtil.normalizeToLowerCase(request.email());
 
@@ -57,9 +63,9 @@ public class RegisterService {
 
         Employee employee = Employee.builder()
                 .employeeId(normalizedEmployeeId)
-                .firstName(request.firstName())
-                .middleName(request.middleName())
-                .lastName(request.lastName())
+                .firstName(NormalizationUtil.normalizeName(request.firstName()))
+                .middleName(NormalizationUtil.normalizeName(request.middleName()))
+                .lastName(NormalizationUtil.normalizeName(request.lastName()))
                 .user(user)
                 .build();
         employeeRepository.save(employee);
@@ -74,6 +80,21 @@ public class RegisterService {
                 .build();
         accountInvitationRepository.save(accountInvitation);
 
-        return rawToken;
+        EmailDelivery emailDelivery = EmailDelivery.builder()
+                .accountInvitation(accountInvitation)
+                .recipientEmail(user.getEmail())
+                .emailType(EmailType.ACCOUNT_INVITATION)
+                .status(EmailStatus.PENDING)
+                .attemptCount(0)
+                .build();
+
+        emailDeliveryRepository.save(emailDelivery);
+
+        return new RegisterResult(
+                emailDelivery.getId(),
+                user.getEmail(),
+                employee.getFirstName(),
+                rawToken
+        );
     }
 }

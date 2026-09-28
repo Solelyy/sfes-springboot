@@ -24,8 +24,8 @@ public class ResendInvitationController {
         ResendInvitationResponse result =
                 resendInvitationService.resendInvitation(request.employeeId());
 
-        emailActivationService.sendActivationEmail(result.email(), result.firstName(), result.rawToken());
+        emailActivationService.sendActivationEmail(result.emailDeliveryId(), result.email(), result.firstName(), result.rawToken());
 
-        return new ApiMessage("Invitation resent successfully");
+        return new ApiMessage("Invitation queued for delivery.");
     }
 }
