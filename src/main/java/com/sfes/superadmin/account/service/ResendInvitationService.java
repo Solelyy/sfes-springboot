@@ -1,5 +1,9 @@
 package com.sfes.superadmin.account.service;
 
+import com.sfes.common.classes.email.EmailDelivery;
+import com.sfes.common.classes.email.EmailDeliveryRepository;
+import com.sfes.common.classes.email.EmailStatus;
+import com.sfes.common.classes.email.EmailType;
 import com.sfes.common.exceptions.InvalidRequestException;
 import com.sfes.common.utility.NormalizationUtil;
 import com.sfes.common.utility.TokenService;
@@ -24,6 +28,7 @@ public class ResendInvitationService {
     private final AccountInvitationRepository accountInvitationRepository;
     private final TokenService tokenService;
     private final EmployeeRepository employeeRepository;
+    private final EmailDeliveryRepository emailDeliveryRepository;
 
     @Value("${invitation.expiration}")
     private long invitationExpiration;
@@ -61,7 +66,18 @@ public class ResendInvitationService {
                 .build();
         accountInvitationRepository.save(newInvitation);
 
+        EmailDelivery emailDelivery = EmailDelivery.builder()
+                .accountInvitation(newInvitation)
+                .recipientEmail(user.getEmail())
+                .emailType(EmailType.ACCOUNT_INVITATION)
+                .status(EmailStatus.PENDING)
+                .attemptCount(0)
+                .build();
+
+        emailDeliveryRepository.save(emailDelivery);
+
         return new ResendInvitationResponse(
+                emailDelivery.getId(),
                 user.getEmail(),
                 user.getEmployee().getFirstName(),
                 rawToken
