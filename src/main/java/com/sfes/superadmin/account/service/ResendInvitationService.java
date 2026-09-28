@@ -69,7 +69,7 @@ public class ResendInvitationService {
         EmailDelivery emailDelivery = EmailDelivery.builder()
                 .accountInvitation(newInvitation)
                 .recipientEmail(user.getEmail())
-                .emailType(EmailType.ACCOUNT_INVITATION)
+                .emailType(EmailType.ACTIVATION)
                 .status(EmailStatus.PENDING)
                 .attemptCount(0)
                 .build();

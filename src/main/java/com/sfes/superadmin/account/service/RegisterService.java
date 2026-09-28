@@ -83,7 +83,7 @@ public class RegisterService {
         EmailDelivery emailDelivery = EmailDelivery.builder()
                 .accountInvitation(accountInvitation)
                 .recipientEmail(user.getEmail())
-                .emailType(EmailType.ACCOUNT_INVITATION)
+                .emailType(EmailType.ACTIVATION)
                 .status(EmailStatus.PENDING)
                 .attemptCount(0)
                 .build();
