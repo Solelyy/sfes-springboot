@@ -36,12 +36,7 @@ public class EmailActivationService {
                 emailDeliveryRepository.findById(emailDeliveryId)
                         .orElseThrow();
 
-        try{
-            emailDelivery.setStatus(EmailStatus.SENDING);
-            emailDelivery.setAttemptCount(emailDelivery.getAttemptCount() + 1);
-
-            emailDeliveryRepository.save(emailDelivery);
-
+        try {
             String activationLink = buildActivationLink(activationToken);
 
             EmailContext emailContext = new EmailContext(
