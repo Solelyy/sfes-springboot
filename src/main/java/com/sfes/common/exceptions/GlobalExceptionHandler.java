@@ -87,6 +87,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiMessage> handleValidationException(
             MethodArgumentNotValidException ex
     ) {
+        ex.getBindingResult()
+                .getFieldErrors()
+                .forEach(error ->
+                        log.debug(
+                                "Validation error: field={}, message={}, rejectedValue={}",
+                                error.getField(),
+                                error.getDefaultMessage(),
+                                error.getRejectedValue()
+                        )
+                );
+
         return ResponseEntity
                 .badRequest()
                 .body(new ApiMessage("Invalid request"));

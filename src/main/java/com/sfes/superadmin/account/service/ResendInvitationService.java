@@ -67,11 +67,11 @@ public class ResendInvitationService {
         accountInvitationRepository.save(newInvitation);
 
         EmailDelivery emailDelivery = EmailDelivery.builder()
-                .accountInvitation(newInvitation)
                 .recipientEmail(user.getEmail())
-                .emailType(EmailType.ACCOUNT_INVITATION)
+                .emailType(EmailType.ACTIVATION)
                 .status(EmailStatus.PENDING)
                 .attemptCount(0)
+                .referenceId(newInvitation.getId())
                 .build();
 
         emailDeliveryRepository.save(emailDelivery);

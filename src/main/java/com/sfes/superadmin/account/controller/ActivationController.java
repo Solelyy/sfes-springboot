@@ -33,7 +33,7 @@ public class ActivationController {
                 token, request.password(), request.confirmPassword()
         );
 
-        successfulActivationService.sendSuccessActivation(result.email(), result.firstName());
+        successfulActivationService.sendSuccessActivation(result.emailDeliveryId(), result.email(), result.firstName());
 
         return new ApiMessage(
                 "Account activated successfully."

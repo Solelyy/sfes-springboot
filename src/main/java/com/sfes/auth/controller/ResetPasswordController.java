@@ -24,7 +24,7 @@ public class ResetPasswordController {
 
         if (result != null) {
             emailService.sendResetPasswordEmail(
-                    result.email(), result.firstName(), result.rawToken()
+                    result.emailDeliveryId(), result.email(), result.firstName(), result.rawToken()
             );
         }
 
@@ -40,7 +40,7 @@ public class ResetPasswordController {
         return new ApiMessage("Valid reset password token");
     }
 
-    @PostMapping("/reset")
+    @PostMapping("/reset/{token}")
     public ApiMessage resetPassword(@PathVariable String token, @Valid @RequestBody PasswordResetRequest request) {
         ResetPasswordResponse result = resetPasswordService.resetPassword(
                 token,
@@ -49,7 +49,7 @@ public class ResetPasswordController {
         );
 
         emailService.sendSuccessfulResetPassword(
-                result.email(), result.firstName()
+                result.emailDeliveryId(), result.email(), result.firstName()
         );
 
         return new ApiMessage("Password successfully reset");
