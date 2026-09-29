@@ -68,16 +68,31 @@ public class ResetPasswordEmailService {
     }
 
     @Async
-    public void sendSuccessfulResetPassword(String email, String firstName){
-        EmailContext emailContext = new EmailContext(
-                from,
-                email,
-                "Successful Password Reset - QCU SFES",
-                "email/successful-reset-password",
-                Map.of("name", firstName, "loginUrl", frontendUrl)
-        );
+    public void sendSuccessfulResetPassword(Long emailDeliveryId, String email, String firstName){
+        EmailDelivery emailDelivery = emailDeliveryRepository.findById(emailDeliveryId)
+                .orElseThrow();
 
-        emailSender.sendEmail(emailContext);
+        try {
+            EmailContext emailContext = new EmailContext(
+                    from,
+                    email,
+                    "Successful Password Reset - QCU SFES",
+                    "email/successful-reset-password",
+                    Map.of("name", firstName, "loginUrl", frontendUrl)
+            );
+
+            emailSender.sendEmail(emailContext);
+
+            emailDelivery.setStatus(EmailStatus.SENT);
+            emailDelivery.setSentAt(Instant.now());
+
+        } catch (Exception e) {
+            emailDelivery.setStatus(EmailStatus.FAILED);
+            emailDelivery.setFailedAt(Instant.now());
+            emailDelivery.setLastError(e.getMessage());
+        } finally {
+            emailDeliveryRepository.save(emailDelivery);
+        }
     }
 }
 

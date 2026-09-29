@@ -2,6 +2,7 @@ package com.sfes.auth.service;
 
 import com.sfes.auth.dto.ResetPasswordResponse;
 import com.sfes.common.classes.email.EmailDelivery;
+import com.sfes.common.classes.email.EmailDeliveryRepository;
 import com.sfes.common.classes.email.EmailStatus;
 import com.sfes.common.classes.email.EmailType;
 import com.sfes.common.exceptions.*;
@@ -32,6 +33,7 @@ public class ResetPasswordService {
     private final TokenService tokenService;
     private final ResetPasswordRepository resetPasswordRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailDeliveryRepository emailDeliveryRepository;
 
     @Value("${reset-password.expiration}")
     private long expiration;
@@ -101,11 +103,16 @@ public class ResetPasswordService {
                 .referenceId(resetPassword.getId())
                 .build();
 
+        emailDeliveryRepository.save(emailDelivery);
+
         return new ResetPasswordResponse(emailDelivery.getId(), user.getEmail(), user.getEmployee().getFirstName(), rawToken);
 
     }
 
     public ResetPassword verifyResetPasswordToken(String token){
+        log.debug("Reset password request received, token present: {}",
+                token);
+
         if (token == null || token.isBlank()) {
             throw new InvalidRequestException("Invalid request");
         }
@@ -153,8 +160,11 @@ public class ResetPasswordService {
                 .recipientEmail(user.getEmail())
                 .emailType(EmailType.PASSWORD_RESET_SUCCESS)
                 .attemptCount(0)
+                .referenceId(resetPassword.getId())
                 .status(EmailStatus.PENDING)
                 .build();
+
+        emailDeliveryRepository.save(emailDelivery);
 
         return new ResetPasswordResponse(
                 emailDelivery.getId(), user.getEmail(), user.getEmployee().getFirstName()
