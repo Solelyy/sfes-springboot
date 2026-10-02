@@ -5,8 +5,6 @@ import com.sfes.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.Instant;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -38,7 +36,7 @@ public class Employee extends BaseEntity {
     @Column(name = "last_name", nullable = false, length = 100)
     private String lastName;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
     @JoinColumn(name = "user_id")
     private User user;
 }
