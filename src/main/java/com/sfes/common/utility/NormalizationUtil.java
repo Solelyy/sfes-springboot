@@ -14,13 +14,13 @@ public final class NormalizationUtil {
     public static String normalizeToUpperCase(String text){
         if (text == null) return  null;
 
-        return text.trim().toUpperCase(Locale.ROOT);
+        return text.trim().replaceAll("\\s+", " ").toUpperCase(Locale.ROOT);
     }
 
     public static String normalizeToLowerCase(String text){
         if (text == null) return  null;
 
-        return text.trim().toLowerCase(Locale.ROOT);
+        return text.trim().replaceAll("\\s+", " ").toLowerCase(Locale.ROOT);
     }
 
     public static String normalizeToEmployeeId(String text) {
