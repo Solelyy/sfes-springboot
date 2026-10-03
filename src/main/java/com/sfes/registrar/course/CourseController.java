@@ -29,7 +29,7 @@ public class CourseController {
         );
     }
 
-    @PatchMapping("{id}")
+    @PatchMapping("/{id}")
     public ApiMessage updateCourse(@PathVariable Long id, @Valid @RequestBody CreateCourse request){
         courseService.updateCourse(id, request);
 
