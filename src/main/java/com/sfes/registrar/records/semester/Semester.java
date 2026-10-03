@@ -1,5 +1,6 @@
 package com.sfes.registrar.records.semester;
 
+import com.sfes.common.classes.BaseEntity;
 import com.sfes.registrar.records.schoolyear.SchoolYear;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,7 +20,7 @@ import lombok.*;
                         columnNames = {"school_year_id", "semester_type"}
                 )
         })
-public class Semester {
+public class Semester extends BaseEntity {
     @Id
     @SequenceGenerator(
             name = "semester_seq",
@@ -33,7 +34,7 @@ public class Semester {
     @Column(name = "semester_type", nullable = false)
     private SemesterType semesterType;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "school_year_id", nullable = false)
     private SchoolYear schoolYear;
 }

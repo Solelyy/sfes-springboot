@@ -59,11 +59,13 @@ public class StudentService {
     }
 
     public StudentResponse getStudents(String departmentCode, int pageNumber, int size, SortBy sortBy, Sort.Direction direction, StudentStatus status) {
+        String normalizedDeptCode = NormalizationUtil.normalizeToUpperCase(departmentCode);
+
         Sort sort = Sort.by(direction, sortBy.getProperty()).and(Sort.by("id").ascending());
 
         Pageable pageable = PageRequest.of(pageNumber - 1, size, sort);
 
-        Page<Student> result = studentRepository.findStudents(departmentCode, status, pageable);
+        Page<Student> result = studentRepository.findStudents(normalizedDeptCode, status, pageable);
 
         List<StudentResponse.StudentDTO> students = result.getContent()
                 .stream()
