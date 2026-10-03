@@ -97,4 +97,30 @@ public final class NormalizationUtil {
             return null;
         }
     }
+
+    public static String normalizeSchoolYr(String schoolYear) {
+        if (schoolYear == null || schoolYear.isBlank()) {
+            throw new InvalidRequestException("School year is required");
+        }
+
+        String normalized = schoolYear.trim();
+
+        if (!normalized.matches("\\d{4}-\\d{4}")) {
+            throw new InvalidRequestException(
+                    "Invalid school year format. Example format: 2026-2027"
+            );
+        }
+
+        String[] years = normalized.split("-");
+        int startYear = Integer.parseInt(years[0]);
+        int endYear = Integer.parseInt(years[1]);
+
+        if (endYear != startYear + 1) {
+            throw new InvalidRequestException(
+                    "School year must contain consecutive years"
+            );
+        }
+
+        return normalized;
+    }
 }
