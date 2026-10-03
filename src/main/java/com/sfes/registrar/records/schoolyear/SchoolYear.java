@@ -1,5 +1,6 @@
 package com.sfes.registrar.records.schoolyear;
 
+import com.sfes.common.classes.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import lombok.*;
 
 @Entity
 @Table(name = "school_years")
-public class SchoolYear {
+public class SchoolYear extends BaseEntity {
     @Id
     @SequenceGenerator(
             name = "schoolyr_seq",
