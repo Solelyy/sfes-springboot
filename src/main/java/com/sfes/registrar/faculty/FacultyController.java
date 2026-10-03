@@ -29,7 +29,7 @@ public class FacultyController {
         return new ApiMessage("Successfully added faculty member");
     }
 
-    @PatchMapping("{id}")
+    @PatchMapping("/{id}")
     public ApiMessage updateFaculty(@PathVariable Long id, @Valid @RequestBody UpdateFacultyRequest request) {
         facultyService.updateFaculty(id, request);
 

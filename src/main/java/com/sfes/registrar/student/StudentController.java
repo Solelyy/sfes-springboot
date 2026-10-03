@@ -44,7 +44,7 @@ public class StudentController {
         );
     }
 
-    @PatchMapping("{id}")
+    @PatchMapping("/{id}")
     public ApiMessage updateStudent(@PathVariable Long id, @Valid @RequestBody UpdateStudentRequest request) {
         studentService.updateStudent(id, request);
 
