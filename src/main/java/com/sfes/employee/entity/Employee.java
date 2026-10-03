@@ -24,7 +24,7 @@ public class Employee extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employee_seq")
     private Long id;
 
-    @Column(name = "employee_id", nullable = false, unique = true, length = 30)
+    @Column(name = "employee_id", nullable = false, unique = true, length = 25)
     private String employeeId;
 
     @Column(name = "first_name", nullable = false, length = 100)
