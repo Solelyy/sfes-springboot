@@ -39,6 +39,7 @@ public class CourseService {
                 .courseName(normalizedCourseName)
                 .courseCode(normalizedCourseCode)
                 .department(department)
+                .durationYears(request.durationYears())
                 .build();
 
         courseRepository.save(course);
@@ -54,7 +55,8 @@ public class CourseService {
                         course.getId(),
                         course.getCourseName(),
                         course.getCourseCode(),
-                        course.getDepartment().getDepartmentCode()
+                        course.getDepartment().getDepartmentCode(),
+                        course.getDurationYears()
                 ))
                 .toList();
 
@@ -95,6 +97,7 @@ public class CourseService {
 
         course.setCourseName(normalizedCourseName);
         course.setCourseCode(normalizedCourseCode);
+        course.setDurationYears(request.durationYears());
         course.setDepartment(department);
     }
 }

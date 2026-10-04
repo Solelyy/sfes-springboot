@@ -13,6 +13,11 @@ public record CreateCourse(
 
         @NotBlank
         @Size(max = 25)
-        String courseCode
+        String courseCode,
+
+        @NotNull
+        @Min(1)
+        @Max(4)
+        Integer durationYears
 )
 {}

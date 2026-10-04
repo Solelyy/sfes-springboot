@@ -9,6 +9,7 @@ public record Courses(
             Long id,
             String courseName,
             String courseCode,
-            String departmentCode
+            String departmentCode,
+            int durationYears
     ) {}
 }
