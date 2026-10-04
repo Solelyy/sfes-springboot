@@ -16,7 +16,7 @@ import lombok.*;
         name = "semesters",
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name = "uk_semester_school_year_type",
+                        name = "uk_school_year_semester",
                         columnNames = {"school_year_id", "semester_type"}
                 )
         })
