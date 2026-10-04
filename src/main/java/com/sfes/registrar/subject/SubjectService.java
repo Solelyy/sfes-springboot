@@ -1,13 +1,12 @@
-package com.sfes.registrar.subjects;
+package com.sfes.registrar.subject;
 
 import com.sfes.common.classes.Meta;
 import com.sfes.common.exceptions.InvalidRequestException;
 import com.sfes.common.utility.NormalizationUtil;
 import com.sfes.registrar.department.Department;
 import com.sfes.registrar.department.DepartmentRepository;
-import com.sfes.registrar.student.Student;
-import com.sfes.registrar.subjects.dto.SubjectRequest;
-import com.sfes.registrar.subjects.dto.SubjectResponse;
+import com.sfes.registrar.subject.dto.SubjectRequest;
+import com.sfes.registrar.subject.dto.SubjectResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

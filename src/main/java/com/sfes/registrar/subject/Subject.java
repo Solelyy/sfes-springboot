@@ -1,4 +1,4 @@
-package com.sfes.registrar.subjects;
+package com.sfes.registrar.subject;
 
 import com.sfes.common.classes.BaseEntity;
 import com.sfes.registrar.department.Department;

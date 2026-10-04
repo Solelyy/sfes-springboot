@@ -1,4 +1,4 @@
-package com.sfes.registrar.subjects;
+package com.sfes.registrar.subject;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

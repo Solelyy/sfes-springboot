@@ -1,4 +1,4 @@
-package com.sfes.registrar.subjects.dto;
+package com.sfes.registrar.subject.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
