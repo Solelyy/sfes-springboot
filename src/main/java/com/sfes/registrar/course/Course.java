@@ -34,7 +34,7 @@ public class Course extends BaseEntity {
     @Column(name = "course_name", nullable = false, unique = true)
     private String courseName;
 
-    @Column(name = "course_code", nullable = false, unique = true)
+    @Column(name = "course_code", nullable = false, unique = true, length = 25)
     private String courseCode;
 
     @Column(name = "duration_years", nullable = false)
