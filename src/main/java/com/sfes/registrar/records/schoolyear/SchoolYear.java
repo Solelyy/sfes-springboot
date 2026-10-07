@@ -15,11 +15,11 @@ import lombok.*;
 public class SchoolYear extends BaseEntity {
     @Id
     @SequenceGenerator(
-            name = "schoolyr_seq",
-            sequenceName = "schoolyr_seq",
+            name = "school_yr_seq",
+            sequenceName = "school_yr_seq",
             allocationSize = 1
     )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "schoolyr_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "school_yr_seq")
     private Long id;
 
     @Column(name = "school_year", unique = true, nullable = false, length = 25)

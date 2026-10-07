@@ -2,10 +2,12 @@ package com.sfes.registrar.course;
 
 import com.sfes.common.exceptions.InvalidRequestException;
 import com.sfes.common.utility.NormalizationUtil;
+import com.sfes.registrar.Status;
 import com.sfes.registrar.course.dto.Courses;
 import com.sfes.registrar.course.dto.CreateCourse;
 import com.sfes.registrar.department.Department;
 import com.sfes.registrar.department.DepartmentRepository;
+import com.sfes.registrar.yearlevel.YearLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,6 +44,20 @@ public class CourseService {
                 .durationYears(request.durationYears())
                 .build();
 
+        for (int i = 1; i <= 4; i++) {
+            YearLevel yearLevel = YearLevel.builder()
+                    .course(course)
+                    .yearNumber(i)
+                    .status(
+                            i <= request.durationYears()
+                                    ? Status.ACTIVE
+                                    : Status.INACTIVE
+                    )
+                    .build();
+
+            course.getYearLevels().add(yearLevel);
+        }
+
         courseRepository.save(course);
     }
 
@@ -67,9 +83,6 @@ public class CourseService {
 
     @Transactional
     public void updateCourse(Long id, CreateCourse request){
-        //validate if the course name and course code is not existing
-        //validate if the department code exists
-
         String normalizedCourseName = NormalizationUtil.normalizeToUpperCase(request.courseName());
         String normalizedCourseCode = NormalizationUtil.normalizeToUpperCase(request.courseCode());
         String normalizedDeptCode = NormalizationUtil.normalizeToUpperCase(request.departmentCode());
@@ -99,5 +112,13 @@ public class CourseService {
         course.setCourseCode(normalizedCourseCode);
         course.setDurationYears(request.durationYears());
         course.setDepartment(department);
+
+        for (YearLevel yearLevel : course.getYearLevels()) {
+            yearLevel.setStatus(
+                    yearLevel.getYearNumber() <= request.durationYears()
+                            ? Status.ACTIVE
+                            : Status.INACTIVE
+            );
+        }
     }
 }

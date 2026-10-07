@@ -1,9 +1,9 @@
-package com.sfes.registrar.subjects;
+package com.sfes.registrar.subject;
 
 import com.sfes.common.classes.ApiMessage;
 import com.sfes.common.classes.ApiResponse;
-import com.sfes.registrar.subjects.dto.SubjectRequest;
-import com.sfes.registrar.subjects.dto.SubjectResponse;
+import com.sfes.registrar.subject.dto.SubjectRequest;
+import com.sfes.registrar.subject.dto.SubjectResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

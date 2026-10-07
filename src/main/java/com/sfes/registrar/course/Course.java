@@ -2,8 +2,12 @@ package com.sfes.registrar.course;
 
 import com.sfes.common.classes.BaseEntity;
 import com.sfes.registrar.department.Department;
+import com.sfes.registrar.yearlevel.YearLevel;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,9 +34,15 @@ public class Course extends BaseEntity {
     @Column(name = "course_name", nullable = false, unique = true)
     private String courseName;
 
-    @Column(name = "course_code", nullable = false, unique = true)
+    @Column(name = "course_code", nullable = false, unique = true, length = 25)
     private String courseCode;
 
     @Column(name = "duration_years", nullable = false)
     private int durationYears;
+
+    @OneToMany(
+            mappedBy = "course",
+            cascade = CascadeType.PERSIST
+    )
+    private List<YearLevel> yearLevels = new ArrayList<>();
 }
