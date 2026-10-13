@@ -20,5 +20,5 @@ public record SubjectRequest(
 
         @NotBlank
         @Size(max = 25)
-        String departmentCode
+        String courseCode
 ) {}

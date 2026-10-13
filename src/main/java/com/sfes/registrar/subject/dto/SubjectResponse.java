@@ -13,6 +13,6 @@ public record SubjectResponse(
             String subjectName,
             String subjectCode,
             int unitCount,
-            String departmentCode
+            String courseCode
     ) {}
 }

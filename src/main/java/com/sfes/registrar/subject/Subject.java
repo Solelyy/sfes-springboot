@@ -1,6 +1,7 @@
 package com.sfes.registrar.subject;
 
 import com.sfes.common.classes.BaseEntity;
+import com.sfes.registrar.course.Course;
 import com.sfes.registrar.department.Department;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,6 +34,6 @@ public class Subject extends BaseEntity {
     private int unitCount;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "department_id", nullable = false)
-    private Department department;
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
 }

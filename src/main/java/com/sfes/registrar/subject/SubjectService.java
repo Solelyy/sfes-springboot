@@ -3,6 +3,8 @@ package com.sfes.registrar.subject;
 import com.sfes.common.classes.Meta;
 import com.sfes.common.exceptions.InvalidRequestException;
 import com.sfes.common.utility.NormalizationUtil;
+import com.sfes.registrar.course.Course;
+import com.sfes.registrar.course.CourseRepository;
 import com.sfes.registrar.department.Department;
 import com.sfes.registrar.department.DepartmentRepository;
 import com.sfes.registrar.subject.dto.SubjectRequest;
@@ -21,13 +23,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SubjectService {
     private final SubjectRepository subjectRepository;
-    private final DepartmentRepository departmentRepository;
+    private final CourseRepository courseRepository;
 
     @Transactional
     public void addSubject(SubjectRequest request){
         String normalizedSubjectName = NormalizationUtil.normalizeToUpperCase(request.subjectName());
         String normalizedSubjectCode = NormalizationUtil.normalizeToUpperCase(request.subjectCode());
-        String normalizedDeptCode = NormalizationUtil.normalizeToUpperCase(request.departmentCode());
+        String normalizedCourseCode = NormalizationUtil.normalizeToUpperCase(request.courseCode());
 
         if (subjectRepository.findBySubjectName(normalizedSubjectName)
                 .isPresent()
@@ -41,13 +43,13 @@ public class SubjectService {
             throw new InvalidRequestException("Subject code already exists");
         }
 
-        Department department = departmentRepository.findByDepartmentCode(normalizedDeptCode)
-                .orElseThrow(() -> new InvalidRequestException("Department does not exist"));
+        Course course = courseRepository.findByCourseCode(normalizedCourseCode)
+                .orElseThrow(() -> new InvalidRequestException("Course does not exist"));
 
         Subject subject = Subject.builder()
                 .subjectName(normalizedSubjectName)
                 .subjectCode(normalizedSubjectCode)
-                .department(department)
+                . course(course)
                 .unitCount(request.unitCount())
                 .build();
 
@@ -55,13 +57,13 @@ public class SubjectService {
     }
 
     public SubjectResponse getSubjects(String departmentCode, int pageNumber, int size) {
-        String normalizedDeptCode = NormalizationUtil.normalizeToUpperCase(departmentCode);
+        String normalizedCourseCode = NormalizationUtil.normalizeToUpperCase(departmentCode);
 
         Sort sort = Sort.by("subjectCode").ascending();
 
         Pageable pageable = PageRequest.of(pageNumber -1,size, sort);
 
-        Page<Subject> result = subjectRepository.findSubjects(normalizedDeptCode, pageable);
+        Page<Subject> result = subjectRepository.findSubjects(normalizedCourseCode, pageable);
 
         List<SubjectResponse.SubjectDto> subjects = result.stream()
                 .map((subject) -> new SubjectResponse.SubjectDto(
@@ -69,7 +71,7 @@ public class SubjectService {
                         subject.getSubjectName(),
                         subject.getSubjectCode(),
                         subject.getUnitCount(),
-                        subject.getDepartment().getDepartmentCode()
+                        subject.getCourse().getCourseCode()
                 ))
                 .toList();
 
@@ -88,7 +90,7 @@ public class SubjectService {
     public void updateSubject(Long id, SubjectRequest request) {
         String normalizedSubjectName = NormalizationUtil.normalizeToUpperCase(request.subjectName());
         String normalizedSubjectCode = NormalizationUtil.normalizeToUpperCase(request.subjectCode());
-        String normalizedDeptCode = NormalizationUtil.normalizeToUpperCase(request.departmentCode());
+        String normalizedCourseCode = NormalizationUtil.normalizeToUpperCase(request.courseCode());
 
         Subject subject = subjectRepository.findById(id)
                 .orElseThrow(() -> new InvalidRequestException("Student does not exist"));
@@ -107,12 +109,12 @@ public class SubjectService {
             throw new InvalidRequestException("Subject code already exist");
         }
 
-        Department department = departmentRepository.findByDepartmentCode(normalizedDeptCode)
-                .orElseThrow(() -> new InvalidRequestException("Department does not exist"));
+        Course course = courseRepository.findByCourseCode(normalizedCourseCode)
+                .orElseThrow(() -> new InvalidRequestException("Course does not exist"));
 
         subject.setSubjectCode(normalizedSubjectCode);
         subject.setSubjectName(normalizedSubjectName);
         subject.setUnitCount(request.unitCount());
-        subject.setDepartment(department);
+        subject.setCourse(course);
     }
 }

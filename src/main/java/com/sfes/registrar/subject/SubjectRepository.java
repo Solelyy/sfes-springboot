@@ -16,11 +16,11 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
     @Query("""
         SELECT s 
         FROM Subject s
-        JOIN FETCH s.department d
-        WHERE (:departmentCode IS NULL or d.departmentCode = :departmentCode)
+        JOIN FETCH s.course c
+        WHERE (:courseCode IS NULL or c.courseCode = :courseCode)
     """)
     Page<Subject> findSubjects(
-            @Param("departmentCode") String departmentCode,
+            @Param("departmentCode") String courseCode,
             Pageable pageable
     );
 
