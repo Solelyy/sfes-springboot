@@ -91,7 +91,7 @@ public class SubjectService {
         String normalizedCourseCode = NormalizationUtil.normalizeToUpperCase(request.courseCode());
 
         Subject subject = subjectRepository.findById(id)
-                .orElseThrow(() -> new InvalidRequestException("Student does not exist"));
+                .orElseThrow(() -> new InvalidRequestException("Subject does not exist"));
 
         if (subjectRepository
                 .findBySubjectNameAndIdNot(normalizedSubjectName, id)
