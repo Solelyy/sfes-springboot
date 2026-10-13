@@ -22,14 +22,14 @@ public class SubjectController {
 
     @GetMapping
     public ApiResponse<SubjectResponse> getSubjects(
-            @RequestParam(required = false) String departmentCode,
+            @RequestParam(required = false) String courseCode,
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "10") int size
 
     ) {
         return new ApiResponse<>(
                 "Subjects retrieved successfully",
-                subjectService.getSubjects(departmentCode, pageNumber, size)
+                subjectService.getSubjects(courseCode, pageNumber, size)
         );
     }
 
