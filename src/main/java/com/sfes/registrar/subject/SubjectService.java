@@ -5,8 +5,6 @@ import com.sfes.common.exceptions.InvalidRequestException;
 import com.sfes.common.utility.NormalizationUtil;
 import com.sfes.registrar.course.Course;
 import com.sfes.registrar.course.CourseRepository;
-import com.sfes.registrar.department.Department;
-import com.sfes.registrar.department.DepartmentRepository;
 import com.sfes.registrar.subject.dto.SubjectRequest;
 import com.sfes.registrar.subject.dto.SubjectResponse;
 import lombok.RequiredArgsConstructor;

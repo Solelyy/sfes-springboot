@@ -2,7 +2,6 @@ package com.sfes.registrar.subject;
 
 import com.sfes.common.classes.BaseEntity;
 import com.sfes.registrar.course.Course;
-import com.sfes.registrar.department.Department;
 import jakarta.persistence.*;
 import lombok.*;
 

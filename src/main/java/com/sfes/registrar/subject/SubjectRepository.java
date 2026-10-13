@@ -20,7 +20,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
         WHERE (:courseCode IS NULL or c.courseCode = :courseCode)
     """)
     Page<Subject> findSubjects(
-            @Param("departmentCode") String courseCode,
+            @Param("courseCode") String courseCode,
             Pageable pageable
     );
 
