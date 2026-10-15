@@ -15,7 +15,7 @@ public interface ClassOfferingRepository extends JpaRepository<ClassOffering, Lo
     SELECT co
     FROM ClassOffering co
     JOIN FETCH co.subject s
-    JOIN s.course c
+    JOIN FETCH s.course c
     WHERE (:courseCode IS NULL or c.courseCode = :courseCode)
     AND co.semester.id = :semesterId
     """)
