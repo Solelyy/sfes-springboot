@@ -5,7 +5,7 @@ import com.sfes.common.exceptions.InvalidRequestException;
 import com.sfes.common.utility.NormalizationUtil;
 import com.sfes.registrar.department.Department;
 import com.sfes.registrar.department.DepartmentRepository;
-import com.sfes.registrar.faculty.SortBy;
+import com.sfes.registrar.student.SortBy;
 import com.sfes.registrar.student.Student;
 import com.sfes.registrar.student.StudentRepository;
 import com.sfes.registrar.student.StudentStatus;

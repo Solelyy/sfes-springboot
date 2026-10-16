@@ -2,7 +2,6 @@ package com.sfes.registrar.student;
 
 import com.sfes.common.classes.ApiMessage;
 import com.sfes.common.classes.ApiResponse;
-import com.sfes.registrar.faculty.SortBy;
 import com.sfes.registrar.student.dto.ImportStudentResponse;
 import com.sfes.registrar.student.dto.StudentRegistration;
 import com.sfes.registrar.student.dto.StudentResponse;
