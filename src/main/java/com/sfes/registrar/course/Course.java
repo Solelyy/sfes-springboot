@@ -40,6 +40,7 @@ public class Course extends BaseEntity {
     @Column(name = "duration_years", nullable = false)
     private int durationYears;
 
+    @Builder.Default
     @OneToMany(
             mappedBy = "course",
             cascade = CascadeType.PERSIST
