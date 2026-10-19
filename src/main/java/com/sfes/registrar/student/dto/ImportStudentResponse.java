@@ -9,8 +9,12 @@ public record ImportStudentResponse(
         List<FailedRow> failedRows
 ) {
     public record FailedRow(
-            int rowNumber,
             String studentId,
+            String email,
+            String firstname,
+            String middleName,
+            String lastName,
+            String departmentCode,
             List<String> reasons
     ){}
 }

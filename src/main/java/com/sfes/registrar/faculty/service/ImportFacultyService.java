@@ -88,8 +88,6 @@ public class ImportFacultyService {
                 .findByDepartmentCodeIn(departmentCodesInCsv).stream()
                 .collect(Collectors.toMap(Department::getDepartmentCode, d-> d));
 
-
-
         Set<String> existingEmployeeIds = new HashSet<>(
                 facultyRepository.findExistingEmployeeIds(
                         records.stream()
@@ -145,8 +143,12 @@ public class ImportFacultyService {
             if (!errors.isEmpty()) {
                 failedRows.add(
                         new ImportFacultyResponse.FailedRow(
-                                rowNumber,
                                 record.getEmployeeId(),
+                                record.getEmail(),
+                                record.getFirstName(),
+                                record.getMiddleName(),
+                                record.getLastName(),
+                                record.getDepartmentCode(),
                                 errors
                         )
                 );

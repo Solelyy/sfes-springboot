@@ -146,8 +146,12 @@ public class ImportStudentService {
             if (!errors.isEmpty()) {
                 failedRows.add(
                         new ImportStudentResponse.FailedRow(
-                                rowNumber,
                                 record.getStudentId(),
+                                record.getEmail(),
+                                record.getFirstName(),
+                                record.getMiddleName(),
+                                record.getLastName(),
+                                record.getDepartmentCode(),
                                 errors
                         )
                 );
