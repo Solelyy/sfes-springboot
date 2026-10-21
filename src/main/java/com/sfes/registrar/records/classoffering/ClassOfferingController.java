@@ -4,6 +4,7 @@ import com.sfes.common.classes.ApiMessage;
 import com.sfes.common.classes.ApiResponse;
 import com.sfes.registrar.records.classoffering.dto.ClassOfferingRequest;
 import com.sfes.registrar.records.classoffering.dto.ClassOfferingResponse;
+import com.sfes.registrar.records.classoffering.dto.SubjectSearchResult;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,17 @@ public class ClassOfferingController {
         return new ApiResponse<>(
                 "Class offerings successfully retrieved",
                 classOfferingService.getClassOfferings(courseCode, semesterId, pageNumber, pageSize)
+        );
+    }
+
+    @GetMapping("/available/{semesterId}")
+    public ApiResponse<SubjectSearchResult> getSearchResponse(
+            @PathVariable Long semesterId,
+            @RequestParam(required = false) String searchItem
+    ){
+        return new ApiResponse<>(
+                "Search results retrieved successfully",
+                classOfferingService.getSearchResponses(semesterId, searchItem)
         );
     }
 }
