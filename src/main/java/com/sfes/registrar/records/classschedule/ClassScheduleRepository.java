@@ -23,7 +23,8 @@ public interface ClassScheduleRepository extends JpaRepository<ClassSchedule, Lo
     SELECT cs
     FROM ClassSchedule cs
     JOIN FETCH cs.classOffering co
-    WHERE co.semester.id = :semesterId
+    JOIN FETCH co.subject sub
+    WHERE co.id = :classOfferingId
     ORDER BY
         CASE
             WHEN cs.dayOfWeek =
@@ -44,7 +45,7 @@ public interface ClassScheduleRepository extends JpaRepository<ClassSchedule, Lo
         cs.id ASC
     """)
     Page<ClassSchedule> findClassSchedules(
-            @Param("semesterId") Long semesterId,
+            @Param("classOfferingId") Long classOfferingId,
             Pageable pageable
     );
 }

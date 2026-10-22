@@ -10,6 +10,7 @@ public record ClassOfferingResponse(
 ) {
     public record ClassOfferingDto(
             Long id,
-            String subjectCode
+            String subjectCode,
+            String subjectName
     ){}
 }

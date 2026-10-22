@@ -3,9 +3,10 @@ package com.sfes.registrar.section;
 import com.sfes.common.classes.Meta;
 import com.sfes.common.exceptions.InvalidRequestException;
 import com.sfes.common.utility.NormalizationUtil;
-import com.sfes.registrar.course.CourseRepository;
+import com.sfes.registrar.records.classschedule.ClassScheduleRepository;
 import com.sfes.registrar.section.dto.SectionRequest;
 import com.sfes.registrar.section.dto.SectionResponse;
+import com.sfes.registrar.section.dto.SectionSearchResult;
 import com.sfes.registrar.yearlevel.YearLevel;
 import com.sfes.registrar.yearlevel.YearLevelRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ import java.util.List;
 public class SectionService {
     private final SectionRepository sectionRepository;
     private final YearLevelRepository yearLevelRepository;
-    private final CourseRepository courseRepository;
+    private final ClassScheduleRepository classScheduleRepository;
 
     @Transactional
     public void createSection(String courseCode, int yearNumber, SectionRequest request){
@@ -102,5 +103,33 @@ public class SectionService {
         }
 
         section.setSectionName(normalizedSectionName);
+    }
+
+    @Transactional(readOnly = true)
+    public SectionSearchResult getSearchResult(Long classScheduleId, String searchItem){
+        if (!classScheduleRepository.existsById(classScheduleId)) {
+            throw new InvalidRequestException("Class schedule not found");
+        }
+
+        String normalizedSearch = (searchItem == null || searchItem.isBlank())
+                ? null
+                : searchItem.trim();
+
+        int pageSize = (normalizedSearch == null) ? 5 : 10;
+
+        Pageable pageable = PageRequest.of(0, pageSize);
+
+        List<SectionSearchResult.SearchResultItem> results;
+
+        if (normalizedSearch == null) {
+            results = sectionRepository.initialSectionSearch(classScheduleId, pageable);
+        } else {
+            results = sectionRepository.findSectionSearchResult(
+                    classScheduleId,
+                    normalizedSearch,
+                    pageable
+            );
+        }
+        return new SectionSearchResult(results);
     }
 }
