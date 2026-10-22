@@ -4,6 +4,7 @@ import com.sfes.common.classes.ApiMessage;
 import com.sfes.common.classes.ApiResponse;
 import com.sfes.registrar.section.dto.SectionRequest;
 import com.sfes.registrar.section.dto.SectionResponse;
+import com.sfes.registrar.section.dto.SectionSearchResult;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -43,5 +44,16 @@ public class SectionController {
     public ApiMessage updateSection(@PathVariable Long id, @Valid @RequestBody SectionRequest request) {
         sectionService.updateSection(id, request);
         return new ApiMessage("Section updated successfully");
+    }
+
+    @GetMapping("/available/{classScheduleId}")
+    public ApiResponse<SectionSearchResult> getSectionSearchResponse(
+            @PathVariable Long classScheduleId,
+            @RequestParam(required = false) String searchItem
+    ){
+        return new ApiResponse<>(
+                "Search results retrieved successfully",
+                sectionService.getSearchResult(classScheduleId, searchItem)
+        );
     }
 }
