@@ -17,6 +17,13 @@ public record ClassScheduleResponse (
             String endTime,
             String room,
             String subjectName,
-            String subjectCode
-    ){}
+            String subjectCode,
+            List<SectionSummary> sections
+
+    ){
+        public record SectionSummary(
+                Long id,
+                String sectionName
+        ) {}
+    }
 }

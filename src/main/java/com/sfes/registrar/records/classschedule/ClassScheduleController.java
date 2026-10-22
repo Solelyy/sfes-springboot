@@ -21,15 +21,15 @@ public class ClassScheduleController {
         return new ApiMessage("Class schedule successfully created");
     }
 
-    @GetMapping("/{semesterId}")
+    @GetMapping("/{classOfferingId}")
     public ApiResponse<ClassScheduleResponse> getClassSchedules(
-            @PathVariable Long semesterId,
+            @PathVariable Long classOfferingId,
             @RequestParam(defaultValue = "1") int pageNumber,
             @RequestParam(defaultValue = "10") int pageSize
             ){
         return new ApiResponse<>(
                 "Class schedules successfully retrieved",
-                classScheduleService.getClassSchedules(semesterId, pageNumber, pageSize)
+                classScheduleService.getClassSchedules(classOfferingId, pageNumber, pageSize)
         );
     }
 }
