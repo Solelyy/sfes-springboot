@@ -1,6 +1,6 @@
 package com.sfes.registrar.subject;
 
-import com.sfes.registrar.records.classoffering.dto.SubjectSearchResult;
+import com.sfes.registrar.subject.dto.SubjectSearchResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,7 +31,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
     Optional<Subject> findBySubjectCodeAndIdNot(String subjectCode, Long id);
 
     @Query("""
-    SELECT new com.sfes.registrar.records.classoffering.dto.SubjectSearchResult$SearchResultItem(
+    SELECT new com.sfes.registrar.subject.dto.SubjectSearchResult$SearchResultItem(
         s.id,
         s.subjectName,
         s.subjectCode,
@@ -51,7 +51,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
     );
 
     @Query("""
-    SELECT new com.sfes.registrar.records.classoffering.dto.SubjectSearchResult$SearchResultItem(
+    SELECT new com.sfes.registrar.subject.dto.SubjectSearchResult$SearchResultItem(
         s.id,
         s.subjectName,
         s.subjectCode,

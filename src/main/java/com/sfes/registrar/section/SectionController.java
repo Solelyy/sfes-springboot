@@ -46,7 +46,7 @@ public class SectionController {
         return new ApiMessage("Section updated successfully");
     }
 
-    @GetMapping("/available/{classScheduleId}")
+    @GetMapping("/{classScheduleId}")
     public ApiResponse<SectionSearchResult> getSectionSearchResponse(
             @PathVariable Long classScheduleId,
             @RequestParam(required = false) String searchItem
