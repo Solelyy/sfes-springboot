@@ -7,6 +7,7 @@ import com.sfes.registrar.course.Course;
 import com.sfes.registrar.course.CourseRepository;
 import com.sfes.registrar.subject.dto.SubjectRequest;
 import com.sfes.registrar.subject.dto.SubjectResponse;
+import com.sfes.registrar.subject.dto.SubjectSearchResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -114,5 +115,36 @@ public class SubjectService {
         subject.setSubjectName(normalizedSubjectName);
         subject.setUnitCount(request.unitCount());
         subject.setCourse(course);
+    }
+
+    @Transactional(readOnly = true)
+    public SubjectSearchResponse getSearchResponses(
+            Long semesterId,
+            String searchItem
+    ){
+        String normalizedSearch = (searchItem == null || searchItem.isBlank())
+                ? null
+                : searchItem.trim();
+
+        int pageSize = (normalizedSearch == null) ? 5 : 10;
+
+        Pageable pageable = PageRequest.of(0, pageSize);
+
+        List<SubjectSearchResponse.SearchResultItem> results;
+
+        if (normalizedSearch == null) {
+            results = subjectRepository.initialSubjectsSearch(
+                    semesterId,
+                    pageable
+            );
+        } else {
+            results = subjectRepository.findSubjectsSearchResult(
+                    semesterId,
+                    normalizedSearch,
+                    pageable
+            );
+        }
+
+        return new SubjectSearchResponse(results);
     }
 }

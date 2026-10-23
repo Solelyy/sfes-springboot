@@ -5,7 +5,6 @@ import com.sfes.common.exceptions.InvalidRequestException;
 import com.sfes.common.utility.NormalizationUtil;
 import com.sfes.registrar.records.classoffering.dto.ClassOfferingRequest;
 import com.sfes.registrar.records.classoffering.dto.ClassOfferingResponse;
-import com.sfes.registrar.records.classoffering.dto.SubjectSearchResult;
 import com.sfes.registrar.records.semester.Semester;
 import com.sfes.registrar.records.semester.SemesterRepository;
 import com.sfes.registrar.subject.Subject;
@@ -86,36 +85,5 @@ public class ClassOfferingService {
                         result.getTotalElements()
                 )
         );
-    }
-
-    @Transactional(readOnly = true)
-    public SubjectSearchResult getSearchResponses(
-            Long semesterId,
-            String searchItem
-    ){
-        String normalizedSearch = (searchItem == null || searchItem.isBlank())
-                ? null
-                : searchItem.trim();
-
-        int pageSize = (normalizedSearch == null) ? 5 : 10;
-
-        Pageable pageable = PageRequest.of(0, pageSize);
-
-        List<SubjectSearchResult.SearchResultItem> results;
-
-        if (normalizedSearch == null) {
-            results = subjectRepository.initialSubjectsSearch(
-                    semesterId,
-                    pageable
-            );
-        } else {
-            results = subjectRepository.findSubjectsSearchResult(
-                    semesterId,
-                    normalizedSearch,
-                    pageable
-            );
-        }
-
-        return new SubjectSearchResult(results);
     }
 }

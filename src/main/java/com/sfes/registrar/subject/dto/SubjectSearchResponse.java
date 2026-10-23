@@ -1,8 +1,8 @@
-package com.sfes.registrar.records.classoffering.dto;
+package com.sfes.registrar.subject.dto;
 
 import java.util.List;
 
-public record SubjectSearchResult(
+public record SubjectSearchResponse(
         List<SearchResultItem> searchResults
 ) {
     public record SearchResultItem(

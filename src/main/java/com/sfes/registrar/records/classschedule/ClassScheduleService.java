@@ -4,12 +4,15 @@ import com.sfes.common.classes.Meta;
 import com.sfes.common.exceptions.InvalidRequestException;
 import com.sfes.common.utility.NormalizationUtil;
 import com.sfes.common.utility.TimeUtil;
+import com.sfes.registrar.faculty.dto.FacultySearchResponse;
 import com.sfes.registrar.records.classoffering.ClassOffering;
 import com.sfes.registrar.records.classoffering.ClassOfferingRepository;
 import com.sfes.registrar.records.classschedule.dto.ClassScheduleRequest;
 import com.sfes.registrar.records.classschedule.dto.ClassScheduleResponse;
 import com.sfes.registrar.records.classschedulesections.ClassScheduleSection;
 import com.sfes.registrar.records.classschedulesections.ClassScheduleSectionRepository;
+import com.sfes.registrar.records.facultyassignment.FacultyAssignment;
+import com.sfes.registrar.records.facultyassignment.FacultyAssignmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +31,7 @@ public class ClassScheduleService {
     private final ClassOfferingRepository classOfferingRepository;
     private final ClassScheduleRepository classScheduleRepository;
     private final ClassScheduleSectionRepository classScheduleSectionRepository;
+    private final FacultyAssignmentRepository facultyAssignmentRepository;
 
     @Transactional
     public void createClassSchedule(Long classOfferingId, ClassScheduleRequest request){
@@ -49,8 +53,6 @@ public class ClassScheduleService {
         ).isPresent()) {
             throw new InvalidRequestException("Class schedule already exists");
         }
-
-        TimeUtil.validateStartEndTime(normalizeStartTime, normalizeEndTime);
 
         ClassSchedule classSchedule = ClassSchedule.builder()
                 .classOffering(classOffering)
@@ -76,15 +78,17 @@ public class ClassScheduleService {
 
         List<ClassSchedule> schedules = result.getContent();
 
+        Meta meta = new Meta(
+                result.getNumber() + 1,
+                result.getSize(),
+                result.getTotalPages(),
+                result.getTotalElements()
+        );
+
         if (schedules.isEmpty()) {
             return new ClassScheduleResponse(
                     List.of(),
-                    new Meta(
-                            result.getNumber() + 1,
-                            result.getSize(),
-                            result.getTotalPages(),
-                            result.getTotalElements()
-                    )
+                    meta
             );
         }
 
@@ -110,6 +114,25 @@ public class ClassScheduleService {
                         )
                 ));
 
+        List<FacultyAssignment> facultyAssignments = facultyAssignmentRepository
+                .findActiveAssignmentsByClassScheduleIds(scheduleIds);
+
+        Map<Long, FacultySearchResponse.AssignedFaculty> facultyByScheduleId =
+                facultyAssignments.stream()
+                        .collect(Collectors.toMap(
+                                assignment ->
+                                        assignment.getClassSchedule().getId(),
+                                assignment -> {
+                                    var faculty = assignment.getFaculty();
+
+                                    return new FacultySearchResponse.AssignedFaculty(
+                                            faculty.getId(),
+                                            faculty.getFirstName(),
+                                            faculty.getMiddleName(),
+                                            faculty.getLastName()
+                                    );
+                                }
+                        ));
 
         List<ClassScheduleResponse.ClassScheduleDto> classSchedules = schedules
                 .stream()
@@ -129,19 +152,12 @@ public class ClassScheduleService {
                             sectionsByScheduleId.getOrDefault(
                                     schedule.getId(),
                                     List.of()
-                            )
+                            ),
+                            facultyByScheduleId.get(schedule.getId())
                     );
                 })
                 .toList();
 
-        return new ClassScheduleResponse(
-                classSchedules,
-                new Meta(
-                        result.getNumber() + 1,
-                        result.getSize(),
-                        result.getTotalPages(),
-                        result.getTotalElements()
-                )
-        );
+        return new ClassScheduleResponse(classSchedules, meta);
     }
 }

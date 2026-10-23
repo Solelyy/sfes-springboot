@@ -3,10 +3,7 @@ package com.sfes.registrar.faculty;
 import com.sfes.common.classes.ApiMessage;
 import com.sfes.common.classes.ApiResponse;
 import com.sfes.registrar.Status;
-import com.sfes.registrar.faculty.dto.FacultyResponse;
-import com.sfes.registrar.faculty.dto.ImportFacultyResponse;
-import com.sfes.registrar.faculty.dto.RegisterFacultyRequest;
-import com.sfes.registrar.faculty.dto.UpdateFacultyRequest;
+import com.sfes.registrar.faculty.dto.*;
 import com.sfes.registrar.faculty.service.FacultyService;
 import com.sfes.registrar.faculty.service.ImportFacultyService;
 import jakarta.validation.Valid;
@@ -60,5 +57,16 @@ public class FacultyController {
                 "Faculty import completed",
                 importFacultyService.importFaculty(file)
                 );
+    }
+
+    @GetMapping("/{classScheduleId}")
+    public ApiResponse<FacultySearchResponse> getFacultyResponse(
+            @PathVariable Long classScheduleId,
+            @RequestParam(required = false) String searchItem
+    ) {
+        return new ApiResponse<>(
+                "Search results retrieved successfully",
+                facultyService.getFacultySearchResponse(classScheduleId, searchItem)
+        );
     }
 }

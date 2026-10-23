@@ -1,6 +1,7 @@
 package com.sfes.registrar.records.classschedule.dto;
 
 import com.sfes.common.classes.Meta;
+import com.sfes.registrar.faculty.dto.FacultySearchResponse;
 import com.sfes.registrar.records.classschedule.DayOfWeek;
 
 import java.time.LocalTime;
@@ -18,7 +19,8 @@ public record ClassScheduleResponse (
             String room,
             String subjectName,
             String subjectCode,
-            List<SectionSummary> sections
+            List<SectionSummary> sections,
+            FacultySearchResponse.AssignedFaculty professor
 
     ){
         public record SectionSummary(

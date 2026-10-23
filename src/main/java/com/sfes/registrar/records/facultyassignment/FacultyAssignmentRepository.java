@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface FacultyAssignmentRepository extends JpaRepository<FacultyAssignment, Long> {
@@ -44,5 +45,16 @@ public interface FacultyAssignmentRepository extends JpaRepository<FacultyAssign
     Page<FacultyAssignment> findFacultyAssignments(
             @Param("semesterId") Long semesterId,
             Pageable pageable
+    );
+
+    @Query("""
+    SELECT fa
+    FROM FacultyAssignment fa
+    JOIN FETCH fa.faculty 
+    WHERE fa.classSchedule.id IN :classScheduleIds
+      AND fa.unassignedAt IS NULL
+    """)
+    List<FacultyAssignment> findActiveAssignmentsByClassScheduleIds(
+            @Param("classScheduleIds") List<Long> classScheduleIds
     );
 }

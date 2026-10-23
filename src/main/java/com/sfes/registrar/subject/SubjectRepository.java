@@ -1,6 +1,6 @@
 package com.sfes.registrar.subject;
 
-import com.sfes.registrar.records.classoffering.dto.SubjectSearchResult;
+import com.sfes.registrar.subject.dto.SubjectSearchResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,7 +31,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
     Optional<Subject> findBySubjectCodeAndIdNot(String subjectCode, Long id);
 
     @Query("""
-    SELECT new com.sfes.registrar.records.classoffering.dto.SubjectSearchResult$SearchResultItem(
+    SELECT new com.sfes.registrar.subject.dto.SubjectSearchResponse$SearchResultItem(
         s.id,
         s.subjectName,
         s.subjectCode,
@@ -45,13 +45,13 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
     FROM Subject s
     ORDER BY s.subjectCode ASC
     """)
-    List<SubjectSearchResult.SearchResultItem> initialSubjectsSearch(
+    List<SubjectSearchResponse.SearchResultItem> initialSubjectsSearch(
             @Param("semesterId") Long semesterId,
             Pageable pageable
     );
 
     @Query("""
-    SELECT new com.sfes.registrar.records.classoffering.dto.SubjectSearchResult$SearchResultItem(
+    SELECT new com.sfes.registrar.subject.dto.SubjectSearchResponse$SearchResultItem(
         s.id,
         s.subjectName,
         s.subjectCode,
@@ -67,7 +67,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
         OR LOWER(s.subjectName) LIKE LOWER(CONCAT('%', :searchItem, '%'))
     ORDER BY s.subjectCode ASC
     """)
-    List<SubjectSearchResult.SearchResultItem> findSubjectsSearchResult(
+    List<SubjectSearchResponse.SearchResultItem> findSubjectsSearchResult(
             @Param("semesterId") Long semesterId,
             @Param("searchItem") String searchItem,
             Pageable pageable

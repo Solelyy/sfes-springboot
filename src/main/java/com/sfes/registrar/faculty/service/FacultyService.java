@@ -10,9 +10,11 @@ import com.sfes.registrar.faculty.Faculty;
 import com.sfes.registrar.faculty.FacultyRepository;
 import com.sfes.registrar.faculty.SortBy;
 import com.sfes.registrar.faculty.dto.FacultyResponse;
+import com.sfes.registrar.faculty.dto.FacultySearchResponse;
 import com.sfes.registrar.faculty.dto.RegisterFacultyRequest;
 import com.sfes.registrar.faculty.dto.UpdateFacultyRequest;
-import jakarta.transaction.Transactional;
+import com.sfes.registrar.records.classschedule.ClassScheduleRepository;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -29,6 +31,7 @@ import java.util.List;
 public class FacultyService {
     private final FacultyRepository facultyRepository;
     private final DepartmentRepository departmentRepository;
+    private final ClassScheduleRepository classScheduleRepository;
 
     @Transactional
     public void addFacultyMember(RegisterFacultyRequest request) {
@@ -126,5 +129,45 @@ public class FacultyService {
         faculty.setLastName(request.lastName());
         faculty.setDepartment(department);
         faculty.setStatus(request.status());
+    }
+
+    @Transactional(readOnly = true)
+    public FacultySearchResponse getFacultySearchResponse(Long classScheduleId, String searchItem){
+        if (!classScheduleRepository.existsById(classScheduleId)) {
+            throw new InvalidRequestException("Class schedule not found");
+        }
+
+        String normalizedSearch = (searchItem == null || searchItem.isBlank())
+                ? null
+                : searchItem.trim();
+
+        int pageSize = (normalizedSearch == null) ? 5 : 10;
+
+        Pageable pageable = PageRequest.of(0, pageSize);
+
+        List<FacultySearchResponse.SearchResultItem> result;
+
+        if (normalizedSearch == null) {
+            result = facultyRepository.initialFacultySearch(
+                    classScheduleId,
+                    pageable
+            );
+        } else {
+            result = facultyRepository.findFacultySearch(
+                    classScheduleId,
+                    normalizedSearch,
+                    pageable
+            ).stream()
+                    .map(f -> new FacultySearchResponse.SearchResultItem(
+                            f.getId(),
+                            f.getFirstName(),
+                            f.getMiddleName(),
+                            f.getLastName(),
+                            f.getIsAssigned()
+                    ))
+                    .toList();
+        }
+
+        return new FacultySearchResponse(result);
     }
 }

@@ -1,6 +1,6 @@
 package com.sfes.registrar.section;
 
-import com.sfes.registrar.section.dto.SectionSearchResult;
+import com.sfes.registrar.section.dto.SectionSearchResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,7 +32,7 @@ public interface SectionRepository extends JpaRepository<Section, Long> {
     );
 
     @Query("""
-    SELECT new com.sfes.registrar.section.dto.SectionSearchResult$SearchResultItem(
+    SELECT new com.sfes.registrar.section.dto.SectionSearchResponse$SearchResultItem(
         s.id,
         s.sectionName,
         CASE WHEN EXISTS (
@@ -45,14 +45,14 @@ public interface SectionRepository extends JpaRepository<Section, Long> {
     FROM Section s
     ORDER BY s.sectionName ASC, s.id ASC
     """)
-    List<SectionSearchResult.SearchResultItem> initialSectionSearch(
+    List<SectionSearchResponse.SearchResultItem> initialSectionSearch(
             @Param("classScheduleId") Long classScheduleId,
             Pageable pageable
     );
 
 
     @Query("""
-    SELECT new com.sfes.registrar.section.dto.SectionSearchResult$SearchResultItem(
+    SELECT new com.sfes.registrar.section.dto.SectionSearchResponse$SearchResultItem(
         s.id,
         s.sectionName,
         CASE WHEN EXISTS (
@@ -66,7 +66,7 @@ public interface SectionRepository extends JpaRepository<Section, Long> {
     WHERE LOWER(s.sectionName) LIKE LOWER(CONCAT('%', :searchItem, '%'))
     ORDER BY s.sectionName ASC, s.id ASC
     """)
-    List<SectionSearchResult.SearchResultItem> findSectionSearchResult(
+    List<SectionSearchResponse.SearchResultItem> findSectionSearchResult(
             @Param("classScheduleId") Long classScheduleId,
             @Param("searchItem") String searchItem,
             Pageable pageable
