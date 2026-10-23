@@ -32,7 +32,7 @@ public interface SectionRepository extends JpaRepository<Section, Long> {
     );
 
     @Query("""
-    SELECT new com.sfes.registrar.section.dto.SectionSearchResult$SearchResultItem(
+    SELECT new com.sfes.registrar.section.dto.SectionSearchResponse$SearchResultItem(
         s.id,
         s.sectionName,
         CASE WHEN EXISTS (
@@ -52,7 +52,7 @@ public interface SectionRepository extends JpaRepository<Section, Long> {
 
 
     @Query("""
-    SELECT new com.sfes.registrar.section.dto.SectionSearchResult$SearchResultItem(
+    SELECT new com.sfes.registrar.section.dto.SectionSearchResponse$SearchResultItem(
         s.id,
         s.sectionName,
         CASE WHEN EXISTS (

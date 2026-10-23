@@ -7,6 +7,16 @@ public record FacultySearchResponse (
 ){
     public record SearchResultItem(
             Long id,
-            String fullName
+            String firstName,
+            String middleName,
+            String lastName,
+            boolean isAssigned
+    ){}
+
+    public record AssignedFaculty(
+            Long id,
+            String firstName,
+            String middleName,
+            String lastName
     ){}
 }

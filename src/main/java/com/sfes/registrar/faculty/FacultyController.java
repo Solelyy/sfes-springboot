@@ -58,4 +58,15 @@ public class FacultyController {
                 importFacultyService.importFaculty(file)
                 );
     }
+
+    @GetMapping("/{classScheduleId}")
+    public ApiResponse<FacultySearchResponse> getFacultyResponse(
+            @PathVariable Long classScheduleId,
+            @RequestParam(required = false) String searchItem
+    ) {
+        return new ApiResponse<>(
+                "Search results retrieved successfully",
+                facultyService.getFacultySearchResponse(classScheduleId, searchItem)
+        );
+    }
 }

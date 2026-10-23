@@ -31,7 +31,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
     Optional<Subject> findBySubjectCodeAndIdNot(String subjectCode, Long id);
 
     @Query("""
-    SELECT new com.sfes.registrar.subject.dto.SubjectSearchResult$SearchResultItem(
+    SELECT new com.sfes.registrar.subject.dto.SubjectSearchResponse$SearchResultItem(
         s.id,
         s.subjectName,
         s.subjectCode,
@@ -51,7 +51,7 @@ public interface SubjectRepository extends JpaRepository<Subject, Long> {
     );
 
     @Query("""
-    SELECT new com.sfes.registrar.subject.dto.SubjectSearchResult$SearchResultItem(
+    SELECT new com.sfes.registrar.subject.dto.SubjectSearchResponse$SearchResultItem(
         s.id,
         s.subjectName,
         s.subjectCode,
