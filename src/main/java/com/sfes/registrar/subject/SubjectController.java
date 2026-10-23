@@ -4,7 +4,7 @@ import com.sfes.common.classes.ApiMessage;
 import com.sfes.common.classes.ApiResponse;
 import com.sfes.registrar.subject.dto.SubjectRequest;
 import com.sfes.registrar.subject.dto.SubjectResponse;
-import com.sfes.registrar.subject.dto.SubjectSearchResult;
+import com.sfes.registrar.subject.dto.SubjectSearchResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +42,7 @@ public class SubjectController {
     }
 
     @GetMapping("/{semesterId}")
-    public ApiResponse<SubjectSearchResult> getSearchResponse(
+    public ApiResponse<SubjectSearchResponse> getSearchResponse(
             @PathVariable Long semesterId,
             @RequestParam(required = false) String searchItem
     ){

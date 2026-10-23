@@ -2,7 +2,7 @@ package com.sfes.registrar.section.dto;
 
 import java.util.List;
 
-public record SectionSearchResult(
+public record SectionSearchResponse(
         List<SearchResultItem> searchResults
 ) {
     public record SearchResultItem(

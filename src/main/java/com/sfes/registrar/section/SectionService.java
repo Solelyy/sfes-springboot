@@ -6,7 +6,7 @@ import com.sfes.common.utility.NormalizationUtil;
 import com.sfes.registrar.records.classschedule.ClassScheduleRepository;
 import com.sfes.registrar.section.dto.SectionRequest;
 import com.sfes.registrar.section.dto.SectionResponse;
-import com.sfes.registrar.section.dto.SectionSearchResult;
+import com.sfes.registrar.section.dto.SectionSearchResponse;
 import com.sfes.registrar.yearlevel.YearLevel;
 import com.sfes.registrar.yearlevel.YearLevelRepository;
 import lombok.RequiredArgsConstructor;
@@ -106,7 +106,7 @@ public class SectionService {
     }
 
     @Transactional(readOnly = true)
-    public SectionSearchResult getSearchResult(Long classScheduleId, String searchItem){
+    public SectionSearchResponse getSearchResult(Long classScheduleId, String searchItem){
         if (!classScheduleRepository.existsById(classScheduleId)) {
             throw new InvalidRequestException("Class schedule not found");
         }
@@ -119,7 +119,7 @@ public class SectionService {
 
         Pageable pageable = PageRequest.of(0, pageSize);
 
-        List<SectionSearchResult.SearchResultItem> results;
+        List<SectionSearchResponse.SearchResultItem> results;
 
         if (normalizedSearch == null) {
             results = sectionRepository.initialSectionSearch(classScheduleId, pageable);
@@ -130,6 +130,6 @@ public class SectionService {
                     pageable
             );
         }
-        return new SectionSearchResult(results);
+        return new SectionSearchResponse(results);
     }
 }

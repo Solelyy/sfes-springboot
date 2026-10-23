@@ -4,7 +4,7 @@ import com.sfes.common.classes.ApiMessage;
 import com.sfes.common.classes.ApiResponse;
 import com.sfes.registrar.section.dto.SectionRequest;
 import com.sfes.registrar.section.dto.SectionResponse;
-import com.sfes.registrar.section.dto.SectionSearchResult;
+import com.sfes.registrar.section.dto.SectionSearchResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +47,7 @@ public class SectionController {
     }
 
     @GetMapping("/{classScheduleId}")
-    public ApiResponse<SectionSearchResult> getSectionSearchResponse(
+    public ApiResponse<SectionSearchResponse> getSectionSearchResponse(
             @PathVariable Long classScheduleId,
             @RequestParam(required = false) String searchItem
     ){
