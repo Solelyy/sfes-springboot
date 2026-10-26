@@ -2,10 +2,7 @@ package com.sfes.registrar.student;
 
 import com.sfes.common.classes.ApiMessage;
 import com.sfes.common.classes.ApiResponse;
-import com.sfes.registrar.student.dto.ImportStudentResponse;
-import com.sfes.registrar.student.dto.StudentRegistration;
-import com.sfes.registrar.student.dto.StudentResponse;
-import com.sfes.registrar.student.dto.UpdateStudentRequest;
+import com.sfes.registrar.student.dto.*;
 import com.sfes.registrar.student.service.ImportStudentService;
 import com.sfes.registrar.student.service.StudentService;
 import jakarta.validation.Valid;
@@ -35,11 +32,20 @@ public class StudentController {
             @RequestParam(defaultValue = "STUDENT_ID") SortBy sortBy,
             @RequestParam(defaultValue = "ASC") Sort.Direction sortDirection,
             @RequestParam(required = false) String departmentCode,
+            @RequestParam(required = false) String courseCode,
             @RequestParam(required = false) StudentStatus status
     ){
         return new ApiResponse<>(
                 "Students retrieved successfully",
-                studentService.getStudents(departmentCode, pageNumber, size, sortBy, sortDirection, status)
+                studentService.getStudents(
+                        departmentCode,
+                        courseCode,
+                        pageNumber,
+                        size,
+                        sortBy,
+                        sortDirection,
+                        status
+                )
         );
     }
 
@@ -58,6 +64,17 @@ public class StudentController {
         return new ApiResponse<>(
                 "Student import completed",
                 importStudentService.importStudents(file)
+        );
+    }
+
+    @GetMapping("/{semesterId}")
+    public ApiResponse<StudentSemEnrollmentSearchResponse> searchStudents(
+            @PathVariable Long semesterId,
+            @RequestParam String searchItem
+    ){
+        return new ApiResponse<>(
+                "Search results retrieved successfully",
+                studentService.getStudentSemEnrollmentSearchResponse(semesterId, searchItem)
         );
     }
 }

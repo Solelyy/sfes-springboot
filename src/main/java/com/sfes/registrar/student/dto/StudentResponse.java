@@ -16,7 +16,7 @@ public record StudentResponse(
             String firstName,
             String middleName,
             String lastName,
-            String departmentCode,
+            String courseCode,
             StudentStatus status
     ){}
 }
