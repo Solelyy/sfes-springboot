@@ -9,12 +9,11 @@ import com.sfes.superadmin.account.AccountInvitationRepository;
 import com.sfes.user.entity.User;
 import com.sfes.user.enums.Role;
 import com.sfes.user.enums.Status;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -23,6 +22,7 @@ public class AccountService {
     private final EmployeeRepository employeeRepository;
     private final AccountInvitationRepository accountInvitationRepository;
 
+    @Transactional(readOnly = true)
     public AccountsResponse getAccounts(Role role) {
         List<AccountsResponse.Account> accounts =
                 employeeRepository.findAccounts(role)

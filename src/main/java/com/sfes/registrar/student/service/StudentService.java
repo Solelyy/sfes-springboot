@@ -12,13 +12,13 @@ import com.sfes.registrar.student.StudentStatus;
 import com.sfes.registrar.student.dto.StudentRegistration;
 import com.sfes.registrar.student.dto.StudentResponse;
 import com.sfes.registrar.student.dto.UpdateStudentRequest;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -58,6 +58,7 @@ public class StudentService {
         studentRepository.save(student);
     }
 
+    @Transactional(readOnly = true)
     public StudentResponse getStudents(String departmentCode, int pageNumber, int size, SortBy sortBy, Sort.Direction direction, StudentStatus status) {
         String normalizedDeptCode = NormalizationUtil.normalizeToUpperCase(departmentCode);
 

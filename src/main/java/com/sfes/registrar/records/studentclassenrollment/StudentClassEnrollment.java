@@ -20,18 +20,18 @@ import java.time.Instant;
 public class StudentClassEnrollment extends BaseEntity {
     @Id
     @SequenceGenerator(
-            name = "student_enrollment_seq",
-            sequenceName = "student_enrollment_seq",
+            name = "student_class_enrollment_seq",
+            sequenceName = "student_class_enrollment_seq",
             allocationSize = 1
     )
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_enrollment_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_class_enrollment_seq")
     private Long id;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch= FetchType.LAZY)
     @JoinColumn(name = "student_id", nullable = false)
     private Student student;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch= FetchType.LAZY)
     @JoinColumn(name = "class_schedule_id", nullable = false)
     private ClassSchedule classSchedule;
 

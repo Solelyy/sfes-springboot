@@ -7,12 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/superadmin")
+@RequestMapping("/superadmin/accounts")
 @RequiredArgsConstructor
 public class AccountsManagementController {
     private final AccountService accountService;
 
-    @GetMapping("/accounts")
+    @GetMapping
     public ApiResponse<AccountsResponse> getAllAccounts(
             @RequestParam(required = false) Role role
     ) {
@@ -22,7 +22,7 @@ public class AccountsManagementController {
         );
     }
 
-    @PatchMapping("/accounts/status")
+    @PatchMapping("/status")
     public ApiMessage updateAccountStatus(@RequestBody UpdateStatusRequest request)
     {
         accountService.updateAccountStatus(request.employeeId(), request.status());
