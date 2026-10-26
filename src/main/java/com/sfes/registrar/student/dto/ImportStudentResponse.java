@@ -14,7 +14,7 @@ public record ImportStudentResponse(
             String firstname,
             String middleName,
             String lastName,
-            String departmentCode,
+            String courseCode,
             List<String> reasons
     ){}
 }

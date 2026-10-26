@@ -26,5 +26,5 @@ public record StudentRegistration(
 
         @NotBlank
         @Size(max = 25)
-        String departmentCode
+        String courseCode
 ) {}

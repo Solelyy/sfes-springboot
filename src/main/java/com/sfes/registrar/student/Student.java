@@ -1,6 +1,7 @@
 package com.sfes.registrar.student;
 
 import com.sfes.common.classes.BaseEntity;
+import com.sfes.registrar.course.Course;
 import com.sfes.registrar.department.Department;
 import jakarta.persistence.*;
 import lombok.*;
@@ -43,6 +44,6 @@ public class Student extends BaseEntity {
     private StudentStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "department_id", nullable = false)
-    private Department department;
+    @JoinColumn(name = "course_id", nullable = false)
+    private Course course;
 }

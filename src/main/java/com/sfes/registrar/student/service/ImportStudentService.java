@@ -3,8 +3,8 @@ package com.sfes.registrar.student.service;
 import com.sfes.common.exceptions.InvalidRequestException;
 import com.sfes.common.utility.CsvUtil;
 import com.sfes.common.utility.NormalizationUtil;
-import com.sfes.registrar.department.Department;
-import com.sfes.registrar.department.DepartmentRepository;
+import com.sfes.registrar.course.Course;
+import com.sfes.registrar.course.CourseRepository;
 import com.sfes.registrar.student.Student;
 import com.sfes.registrar.student.StudentRepository;
 import com.sfes.registrar.student.StudentStatus;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class ImportStudentService {
     private final StudentRepository studentRepository;
-    private final DepartmentRepository departmentRepository;
+    private final CourseRepository courseRepository;
 
     private static final List<String> REQUIRED_HEADERS =
             List.of(
@@ -35,7 +35,7 @@ public class ImportStudentService {
                     "First Name",
                     "Middle Name",
                     "Last Name",
-                    "Department Code"
+                    "Course Code"
             );
 
     @Transactional
@@ -68,7 +68,7 @@ public class ImportStudentService {
                 NormalizationUtil.normalizeName(record.getFirstName()),
                 NormalizationUtil.normalizeName(record.getMiddleName()),
                 NormalizationUtil.normalizeName(record.getLastName()),
-                NormalizationUtil.normalizeToUpperCase(record.getDepartmentCode())
+                NormalizationUtil.normalizeToUpperCase(record.getCourseCode())
         );
     }
 
@@ -78,14 +78,14 @@ public class ImportStudentService {
         List<Student> validStudents = new ArrayList<>();
         List<ImportStudentResponse.FailedRow> failedRows = new ArrayList<>();
 
-        Set<String> departmentCodesInCsv = records.stream()
-                .map(StudentCsvRecord::getDepartmentCode)
+        Set<String> courseCodesInCsv = records.stream()
+                .map(StudentCsvRecord::getCourseCode)
                 .filter(c -> c !=null && !c.isBlank())
                 .collect(Collectors.toSet());
 
-        Map<String, Department> deptByCode = departmentRepository
-                .findByDepartmentCodeIn(departmentCodesInCsv).stream()
-                .collect(Collectors.toMap(Department::getDepartmentCode, d-> d));
+        Map<String, Course> courseByCode = courseRepository
+                .findByCourseCodeIn(courseCodesInCsv).stream()
+                .collect(Collectors.toMap(Course::getCourseCode, c-> c));
 
         Set<String> existingStudentIds = new HashSet<>(
                 studentRepository.findExistingStudentIds(
@@ -138,9 +138,10 @@ public class ImportStudentService {
                 }
             }
 
-            Department dept = deptByCode.get(record.getDepartmentCode());
-            if (dept == null) {
-                errors.add("Department code does not exist");
+            Course course = courseByCode.get(record.getCourseCode());
+
+            if (course == null) {
+                errors.add("Course code does not exist");
             }
 
             if (!errors.isEmpty()) {
@@ -151,7 +152,7 @@ public class ImportStudentService {
                                 record.getFirstName(),
                                 record.getMiddleName(),
                                 record.getLastName(),
-                                record.getDepartmentCode(),
+                                record.getCourseCode(),
                                 errors
                         )
                 );
@@ -165,7 +166,7 @@ public class ImportStudentService {
                     .middleName(record.getMiddleName())
                     .lastName(record.getLastName())
                     .status(StudentStatus.ACTIVE)
-                    .department(dept)
+                    .course(course)
                     .build();
 
             validStudents.add(student);
@@ -206,8 +207,8 @@ public class ImportStudentService {
             errors.add("Last Name is required");
         }
 
-        if (record.getDepartmentCode() == null || record.getDepartmentCode().isBlank()) {
-            errors.add("Department Code is required");
+        if (record.getCourseCode() == null || record.getCourseCode().isBlank()) {
+            errors.add("Course Code is required");
         }
     }
 }

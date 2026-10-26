@@ -24,6 +24,6 @@ public class StudentCsvRecord {
     @CsvBindByName(column = "Last Name")
     private String lastName;
 
-    @CsvBindByName(column = "Department Code")
-    private String departmentCode;
+    @CsvBindByName(column = "Course Code")
+    private String courseCode;
 }
