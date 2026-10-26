@@ -51,6 +51,7 @@ public class StudentSemesterEnrollmentService {
         }
 
         //validate if section is in the same course of the student
+        //validate if the status of the student is valid to be enrolled
 
         StudentSemesterEnrollment studentSemesterEnrollment = StudentSemesterEnrollment.builder()
                 .semester(semester)
