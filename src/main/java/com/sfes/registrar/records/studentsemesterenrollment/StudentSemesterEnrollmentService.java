@@ -13,6 +13,7 @@ import com.sfes.registrar.section.Section;
 import com.sfes.registrar.section.SectionRepository;
 import com.sfes.registrar.student.Student;
 import com.sfes.registrar.student.StudentRepository;
+import com.sfes.registrar.student.StudentStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -50,14 +51,22 @@ public class StudentSemesterEnrollmentService {
             throw new InvalidRequestException("Student is already enrolled in this semester");
         }
 
-        //validate if section is in the same course of the student
-        //validate if the status of the student is valid to be enrolled
+        if (section.getYearLevel().getCourse() != student.getCourse()) {
+            throw new InvalidRequestException("Section is not in the same course as the student");
+        }
+
+        if (student.getStatus() != StudentStatus.ACTIVE) {
+            throw new InvalidRequestException("Student is not active and cannot be enrolled");
+        }
+
+        if (section.getYearLevel().getStatus() != Status.ACTIVE) {
+            throw new InvalidRequestException("Year level is not active and cannot be enrolled");
+        }
 
         StudentSemesterEnrollment studentSemesterEnrollment = StudentSemesterEnrollment.builder()
                 .semester(semester)
                 .student(student)
                 .section(section)
-                .yearLevel(request.yearLevel())
                 .enrolledAt(Instant.now())
                 .status(Status.ACTIVE)
                 .build();
@@ -92,7 +101,7 @@ public class StudentSemesterEnrollmentService {
                 .map(enrollment -> new StudentSemesterEnrollmentResponse.StudentSemesterEnrollmentDto(
                         enrollment.getId(),
                         enrollment.getStudentId(),
-                        NameUtil.fullName(enrollment.getFirstName(), enrollment.getMiddleName(), enrollment.getLastName()),
+                        NameUtil.fullName(enrollment.getFirstName(), enrollment.getLastName(), enrollment.getMiddleName()),
                         enrollment.getCourseCode(),
                         enrollment.getYearLevel(),
                         enrollment.getSectionName(),

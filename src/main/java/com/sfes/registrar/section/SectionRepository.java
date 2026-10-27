@@ -35,13 +35,17 @@ public interface SectionRepository extends JpaRepository<Section, Long> {
     SELECT new com.sfes.registrar.section.dto.SectionSearchResponse$SearchResultItem(
         s.id,
         s.sectionName,
-        CASE WHEN EXISTS (
-            SELECT css
-            FROM ClassScheduleSection css
-            WHERE css.section.id = s.id
-               AND css.classSchedule.id = :classScheduleId
-        ) THEN true ELSE false END
-    ) 
+        CASE
+            WHEN :classScheduleId IS NOT NULL AND EXISTS (
+                SELECT css
+                FROM ClassScheduleSection css
+                WHERE css.section.id = s.id
+                  AND css.classSchedule.id = :classScheduleId
+            )
+            THEN true
+            ELSE false
+        END
+    )
     FROM Section s
     ORDER BY s.sectionName ASC, s.id ASC
     """)
@@ -50,18 +54,21 @@ public interface SectionRepository extends JpaRepository<Section, Long> {
             Pageable pageable
     );
 
-
     @Query("""
     SELECT new com.sfes.registrar.section.dto.SectionSearchResponse$SearchResultItem(
         s.id,
         s.sectionName,
-        CASE WHEN EXISTS (
-            SELECT css
-            FROM ClassScheduleSection css
-            WHERE css.section.id = s.id
-               AND css.classSchedule.id = :classScheduleId
-        ) THEN true ELSE false END
-    ) 
+        CASE
+            WHEN :classScheduleId IS NOT NULL AND EXISTS (
+                SELECT css
+                FROM ClassScheduleSection css
+                WHERE css.section.id = s.id
+                  AND css.classSchedule.id = :classScheduleId
+            )
+            THEN true
+            ELSE false
+        END
+    )
     FROM Section s
     WHERE LOWER(s.sectionName) LIKE LOWER(CONCAT('%', :searchItem, '%'))
     ORDER BY s.sectionName ASC, s.id ASC

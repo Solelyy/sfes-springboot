@@ -25,7 +25,7 @@ public interface StudentSemesterEnrollmentRepository extends JpaRepository<Stude
                s.middleName AS middleName,
                s.lastName AS lastName,
                c.courseCode AS courseCode,
-               sse.yearLevel AS yearLevel,
+               yl.yearNumber AS yearLevel,
                sec.sectionName AS sectionName,
                sse.status AS status
         FROM StudentSemesterEnrollment sse
@@ -87,6 +87,4 @@ public interface StudentSemesterEnrollmentRepository extends JpaRepository<Stude
             @Param("status") Status status,
             Pageable pageable
     );
-
-
 }

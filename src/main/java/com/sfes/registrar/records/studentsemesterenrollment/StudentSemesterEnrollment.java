@@ -49,9 +49,6 @@ public class StudentSemesterEnrollment extends BaseEntity {
     @JoinColumn(name = "section_id")
     private Section section;
 
-    @Column(name="year_level", nullable = false)
-    private int yearLevel;
-
     @Column(name = "enrolled_at", nullable = false)
     private Instant enrolledAt;
 

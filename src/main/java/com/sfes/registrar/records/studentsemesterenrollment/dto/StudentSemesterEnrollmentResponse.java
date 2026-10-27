@@ -14,7 +14,7 @@ public record StudentSemesterEnrollmentResponse(
             String studentId,
             String studentName,
             String courseCode,
-            int yearLevel,
+            Integer yearLevel,
             String sectionName,
             Status status
     ) {}

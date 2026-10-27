@@ -9,7 +9,7 @@ public interface StudentSemEnrollmentProjection {
     String getMiddleName();
     String getLastName();
     String getCourseCode();
-    int getYearLevel();
+    Integer getYearLevel();
     String getSectionName();
     Status getStatus();
 }
