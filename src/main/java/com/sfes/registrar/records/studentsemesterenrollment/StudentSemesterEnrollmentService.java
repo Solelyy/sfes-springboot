@@ -41,26 +41,31 @@ public class StudentSemesterEnrollmentService {
         Student student = studentRepository.findById(request.studentId())
                 .orElseThrow(() -> new InvalidRequestException("Student not found"));
 
-        Section section = sectionRepository.findById(request.sectionId())
-                .orElseThrow(() -> new InvalidRequestException("Section not found"));
-
-        if(studentSemesterEnrollmentRepository.findByStudentIdAndSemesterId(
+        if (studentSemesterEnrollmentRepository.findByStudentIdAndSemesterId(
                 request.studentId(),
                 semesterId
-        ).isPresent()) {
+        ).isPresent()
+        ) {
             throw new InvalidRequestException("Student is already enrolled in this semester");
-        }
-
-        if (section.getYearLevel().getCourse() != student.getCourse()) {
-            throw new InvalidRequestException("Section is not in the same course as the student");
         }
 
         if (student.getStatus() != StudentStatus.ACTIVE) {
             throw new InvalidRequestException("Student is not active and cannot be enrolled");
         }
 
-        if (section.getYearLevel().getStatus() != Status.ACTIVE) {
-            throw new InvalidRequestException("Year level is not active and cannot be enrolled");
+        Section section = null;
+
+        if (request.sectionId() != null) {
+            section = sectionRepository.findById(request.sectionId())
+                    .orElseThrow(() -> new InvalidRequestException("Section not found"));
+
+            if (section.getYearLevel().getCourse() != student.getCourse()) {
+                throw new InvalidRequestException("Section is not in the same course as the student");
+            }
+
+            if (section.getYearLevel().getStatus() != Status.ACTIVE) {
+                throw new InvalidRequestException("Year level is not active and cannot be enrolled");
+            }
         }
 
         StudentSemesterEnrollment studentSemesterEnrollment = StudentSemesterEnrollment.builder()

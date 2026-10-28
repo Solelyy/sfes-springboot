@@ -17,6 +17,7 @@ public interface StudentSemesterEnrollmentRepository extends JpaRepository<Stude
             Long semesterId
     );
 
+
     @Query(
             value = """
         SELECT sse.id AS id,
@@ -24,24 +25,33 @@ public interface StudentSemesterEnrollmentRepository extends JpaRepository<Stude
                s.firstName AS firstName,
                s.middleName AS middleName,
                s.lastName AS lastName,
-               c.courseCode AS courseCode,
+               COALESCE(sectionCourse.courseCode, studentCourse.courseCode) AS courseCode,
                yl.yearNumber AS yearLevel,
                sec.sectionName AS sectionName,
                sse.status AS status
         FROM StudentSemesterEnrollment sse
         JOIN sse.student s
         JOIN sse.semester sem
+        LEFT JOIN s.course studentCourse
+        LEFT JOIN studentCourse.department studentDepartment
         LEFT JOIN sse.section sec
         LEFT JOIN sec.yearLevel yl
-        LEFT JOIN yl.course c
+        LEFT JOIN yl.course sectionCourse
+        LEFT JOIN sectionCourse.department sectionDepartment
         WHERE sem.id = :semesterId
           AND (
               :departmentCode IS NULL
-              OR c.department.departmentCode = :departmentCode
+              OR COALESCE(
+                  sectionDepartment.departmentCode,
+                  studentDepartment.departmentCode
+              ) = :departmentCode
           )
           AND (
               :courseCode IS NULL
-              OR c.courseCode = :courseCode
+              OR COALESCE(
+                  sectionCourse.courseCode,
+                  studentCourse.courseCode
+              ) = :courseCode
           )
           AND (
               :sectionName IS NULL
@@ -56,18 +66,28 @@ public interface StudentSemesterEnrollmentRepository extends JpaRepository<Stude
             countQuery = """
         SELECT COUNT(sse.id)
         FROM StudentSemesterEnrollment sse
+        JOIN sse.student s
         JOIN sse.semester sem
+        LEFT JOIN s.course studentCourse
+        LEFT JOIN studentCourse.department studentDepartment
         LEFT JOIN sse.section sec
         LEFT JOIN sec.yearLevel yl
-        LEFT JOIN yl.course c
+        LEFT JOIN yl.course sectionCourse
+        LEFT JOIN sectionCourse.department sectionDepartment
         WHERE sem.id = :semesterId
           AND (
               :departmentCode IS NULL
-              OR c.department.departmentCode = :departmentCode
+              OR COALESCE(
+                  sectionDepartment.departmentCode,
+                  studentDepartment.departmentCode
+              ) = :departmentCode
           )
           AND (
               :courseCode IS NULL
-              OR c.courseCode = :courseCode
+              OR COALESCE(
+                  sectionCourse.courseCode,
+                  studentCourse.courseCode
+              ) = :courseCode
           )
           AND (
               :sectionName IS NULL

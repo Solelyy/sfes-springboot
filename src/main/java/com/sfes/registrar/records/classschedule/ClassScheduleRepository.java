@@ -48,4 +48,13 @@ public interface ClassScheduleRepository extends JpaRepository<ClassSchedule, Lo
             @Param("classOfferingId") Long classOfferingId,
             Pageable pageable
     );
+
+    @Query("""
+    SELECT cs.classOffering.semester.id
+    FROM ClassSchedule cs
+    WHERE cs.id = :classScheduleId
+    """)
+    Optional<Long> findSemesterIdByClassScheduleId(
+            @Param("classScheduleId") Long classScheduleId
+    );
 }
