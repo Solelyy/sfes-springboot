@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/registrar/schoolyears")
+@RequestMapping("/registrar/school-years")
 @RequiredArgsConstructor
 public class SchoolYearController {
     private final SchoolYearService schoolYearService;

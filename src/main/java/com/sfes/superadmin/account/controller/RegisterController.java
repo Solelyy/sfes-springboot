@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/superadmin")
+@RequestMapping("/super-admin")
 @RequiredArgsConstructor
 public class RegisterController {
     private final RegisterService registerService;

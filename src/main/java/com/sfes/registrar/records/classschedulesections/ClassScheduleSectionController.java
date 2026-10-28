@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/registrar/classschedulesection")
+@RequestMapping("/registrar/class-schedule-sections")
 @RequiredArgsConstructor
 public class ClassScheduleSectionController {
     private final ClassScheduleSectionService classScheduleSectionService;

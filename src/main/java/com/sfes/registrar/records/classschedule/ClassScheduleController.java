@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/registrar/classschedules")
+@RequestMapping("/registrar/class-schedules")
 @RequiredArgsConstructor
 public class ClassScheduleController {
     private final ClassScheduleService classScheduleService;

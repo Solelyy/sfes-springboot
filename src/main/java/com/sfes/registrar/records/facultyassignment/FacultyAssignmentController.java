@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/registrar/facultyassignments")
+@RequestMapping("/registrar/faculty-assignments")
 @RequiredArgsConstructor
 public class FacultyAssignmentController {
     private final FacultyAssignmentService facultyAssignmentService;

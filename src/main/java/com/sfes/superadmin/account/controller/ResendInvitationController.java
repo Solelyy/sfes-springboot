@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/superadmin")
+@RequestMapping("/super-admin")
 @RequiredArgsConstructor
 public class ResendInvitationController {
     private final EmailActivationService emailActivationService;
