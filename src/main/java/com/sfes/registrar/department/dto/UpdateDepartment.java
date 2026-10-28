@@ -4,7 +4,7 @@ import com.sfes.registrar.Status;
 import jakarta.validation.constraints.NotNull;
 
 public record UpdateDepartment (
-        @NotNull
+        @NotNull(message = "Status is required")
         Status status
 )
 {}

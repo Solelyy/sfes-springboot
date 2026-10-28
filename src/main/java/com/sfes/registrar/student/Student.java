@@ -27,7 +27,7 @@ public class Student extends BaseEntity {
     @Column(name = "student_id", unique = true, nullable = false)
     private String studentId;
 
-    @Column(nullable = false, unique = true, length = 255)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(name = "first_name", nullable = false, length = 100)

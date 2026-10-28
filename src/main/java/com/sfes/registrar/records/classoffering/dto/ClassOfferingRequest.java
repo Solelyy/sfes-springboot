@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record ClassOfferingRequest(
-   @NotBlank
-   @Size(min = 3, max = 25)
+   @NotBlank(message = "Subject code is required")
+   @Size(min = 3, max = 25, message = "Subject code must be between 3 and 25 characters")
    String subjectCode
 ) {}

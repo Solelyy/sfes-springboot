@@ -6,10 +6,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record UpdateStatusRequest(
-        @NotNull
+        @NotNull(message = "Status is required")
         Status status,
 
-        @NotBlank
-        @Size(max = 25)
+        @NotBlank(message = "Employee ID is required")
+        @Size(max = 25, message = "Employee ID must not exceed 25 characters")
         String employeeId
 ) {}

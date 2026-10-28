@@ -24,7 +24,7 @@ public class Faculty extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "faculty_seq")
     private Long id;
 
-    @Column(name = "employee_id", unique = true, nullable = false)
+    @Column(name = "employee_id", unique = true, nullable = false, length = 50)
     private String employeeId;
 
     @Column(nullable = false, unique = true, length = 255)

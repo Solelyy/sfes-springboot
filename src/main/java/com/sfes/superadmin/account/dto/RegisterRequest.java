@@ -10,26 +10,26 @@ import lombok.*;
 @Builder
 
 public record RegisterRequest(
-        @NotBlank
-        @Email
-        @Size(max = 255)
+        @NotBlank(message = "Email is required")
+        @Email(message = "Please provide a valid email address")
+        @Size(min = 1, max = 255, message = "Email must not exceed 255 characters")
         String email,
 
-        @NotBlank
-        @Size(max = 25)
+        @NotBlank(message = "Employee ID is required")
+        @Size(min = 1, max = 25, message = "Employee ID must be between 1 and 25 characters")
         String employeeId,
 
-        @NotBlank
-        @Size(max = 100)
+        @NotBlank(message = "First Name is required")
+        @Size(min = 1, max = 100, message = "First Name must be between 1 and 100 characters")
         String firstName,
 
-        @Size(max = 100)
+        @Size(max = 100, message = "Middle Name must not exceed 100 characters")
         String middleName,
 
-        @NotBlank
-        @Size(max = 100)
+        @NotBlank(message = "Last Name is required")
+        @Size(max = 100, message = "Last Name must not exceed 100 characters")
         String lastName,
 
-        @NotNull
+        @NotNull(message = "Role is required")
         Role role
 ) {}

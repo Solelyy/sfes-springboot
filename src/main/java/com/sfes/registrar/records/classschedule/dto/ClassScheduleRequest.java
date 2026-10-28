@@ -8,16 +8,16 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalTime;
 
 public record ClassScheduleRequest (
-        @NotNull
+        @NotNull(message = "Day of week is required")
         DayOfWeek dayOfWeek,
 
-        @NotNull
+        @NotNull(message = "Start time is required")
         LocalTime startTime,
 
-        @NotNull
+        @NotNull(message = "End time is required")
         LocalTime endTime,
 
-        @NotBlank
-        @Size(min = 3, max = 25)
+        @NotBlank(message = "Room is required")
+        @Size(min = 3, max = 25, message = "Room must be between 3 and 25 characters")
         String room
 ){}
