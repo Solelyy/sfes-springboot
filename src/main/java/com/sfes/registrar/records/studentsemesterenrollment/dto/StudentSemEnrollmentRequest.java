@@ -6,7 +6,6 @@ public record StudentSemEnrollmentRequest(
         @NotNull
         Long studentId,
 
-        @NotNull
         Long sectionId
 ) {
 }

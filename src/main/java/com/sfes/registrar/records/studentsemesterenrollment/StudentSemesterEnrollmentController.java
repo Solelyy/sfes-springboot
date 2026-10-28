@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/registrar/student-semester-enrollment")
+@RequestMapping("/registrar/student-semester-enrollments")
 @RequiredArgsConstructor
 public class StudentSemesterEnrollmentController {
     private final StudentSemesterEnrollmentService studentSemesterEnrollmentService;
@@ -21,7 +21,7 @@ public class StudentSemesterEnrollmentController {
             @Valid @RequestBody StudentSemEnrollmentRequest request
     ) {
         studentSemesterEnrollmentService.createStudentSemesterEnrollment(semesterId, request);
-        return new ApiMessage("Student semester enrollment created successfully.");
+        return new ApiMessage("Student enrolled in a semester successfully.");
     }
 
     @GetMapping("/{semesterId}")
