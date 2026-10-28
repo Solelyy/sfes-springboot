@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/registrar/classofferings")
+@RequestMapping("/registrar/class-offerings")
 @RequiredArgsConstructor
 public class ClassOfferingController {
     private final ClassOfferingService classOfferingService;

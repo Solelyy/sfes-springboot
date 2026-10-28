@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/registrar/yearlevels")
+@RequestMapping("/registrar/year-levels")
 @RequiredArgsConstructor
 public class YearLevelController {
     private final YearLevelService yearLevelService;

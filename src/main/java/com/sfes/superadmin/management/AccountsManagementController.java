@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/superadmin/accounts")
+@RequestMapping("/super-admin/accounts")
 @RequiredArgsConstructor
 public class AccountsManagementController {
     private final AccountService accountService;
