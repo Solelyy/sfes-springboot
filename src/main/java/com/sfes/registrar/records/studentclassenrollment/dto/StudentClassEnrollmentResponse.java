@@ -1,7 +1,7 @@
 package com.sfes.registrar.records.studentclassenrollment.dto;
 
 import com.sfes.common.classes.Meta;
-import com.sfes.registrar.records.classschedule.DayOfWeek;
+import com.sfes.registrar.Status;
 
 import java.util.List;
 
@@ -10,12 +10,10 @@ public record StudentClassEnrollmentResponse (
         Meta meta
 ) {
     public record StudentClassEnrollmentDto(
-            Long enrollmentId,
-            String studentId,
+            Long studentId,
+            String studentIdNumber,
             String studentFullName,
-            String subjectCode,
-            DayOfWeek dayOfWeek,
-            String startTime,
-            String endTime
+            String sectionName,
+            Status status
     ){}
 }
