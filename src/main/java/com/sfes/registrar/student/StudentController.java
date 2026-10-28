@@ -67,14 +67,14 @@ public class StudentController {
         );
     }
 
-    @GetMapping("/{semesterId}")
+    @GetMapping("/search/{semesterId}")
     public ApiResponse<StudentSemEnrollmentSearchResponse> searchStudents(
             @PathVariable Long semesterId,
-            @RequestParam String searchItem
+            @RequestParam String studentId
     ){
         return new ApiResponse<>(
                 "Search results retrieved successfully",
-                studentService.getStudentSemEnrollmentSearchResponse(semesterId, searchItem)
+                studentService.getStudentSemEnrollmentSearchResponse(semesterId, studentId)
         );
     }
 }
