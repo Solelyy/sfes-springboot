@@ -63,6 +63,7 @@ public class FacultyService {
         facultyRepository.save(faculty);
     }
 
+    @Transactional(readOnly = true)
     public FacultyResponse getFaculty(String departmentCode, int pageNumber, int size, SortBy sortBy, Sort.Direction direction, Status status){
         Sort sort = Sort.by(direction, sortBy.getProperty()).and(Sort.by("id").ascending());
 
