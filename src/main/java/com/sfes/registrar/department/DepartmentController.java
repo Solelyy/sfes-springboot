@@ -22,9 +22,9 @@ public class DepartmentController {
         return  new ApiMessage("Department created successfully");
     }
 
-    @PatchMapping("/{departmentCode}")
-    public ApiMessage updateDepartmentStatus(@PathVariable String departmentCode, @Valid @RequestBody UpdateDepartment request) {
-        departmentService.updateDeptStatus(departmentCode, request.status());
+    @PatchMapping("/{id}")
+    public ApiMessage updateDepartmentStatus(@PathVariable Long id, @Valid @RequestBody UpdateDepartment request) {
+        departmentService.updateDeptStatus(id, request);
 
         return new ApiMessage("Department status updated successfully");
     }
