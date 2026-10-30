@@ -8,6 +8,7 @@ public record DepartmentResponse (
         List<DepartmentDto> departments
 ){
     public record DepartmentDto(
+            Long id,
             String departmentName,
             String departmentCode,
             Status status
