@@ -2,6 +2,7 @@ package com.sfes.common.exceptions;
 
 import com.sfes.common.classes.ApiError;
 import com.sfes.common.classes.ApiMessage;
+import com.sfes.common.classes.ApiValidationError;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestControllerAdvice
 @Slf4j
@@ -84,23 +86,18 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiMessage> handleValidationException(
+    public ResponseEntity<ApiValidationError> handleValidationException(
             MethodArgumentNotValidException ex
     ) {
-        ex.getBindingResult()
+        List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
-                .forEach(error ->
-                        log.debug(
-                                "Validation error: field={}, message={}, rejectedValue={}",
-                                error.getField(),
-                                error.getDefaultMessage(),
-                                error.getRejectedValue()
-                        )
-                );
+                .stream()
+                .map(error -> error.getField() + ": " + error.getDefaultMessage())
+                .toList();
 
         return ResponseEntity
                 .badRequest()
-                .body(new ApiMessage("Invalid request"));
+                .body(new ApiValidationError("Validation failed", errors));
     }
 
     @ExceptionHandler(Exception.class)
