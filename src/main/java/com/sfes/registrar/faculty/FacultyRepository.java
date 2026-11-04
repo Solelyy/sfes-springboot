@@ -51,22 +51,21 @@ public interface FacultyRepository extends JpaRepository<Faculty, Long> {
     Set<String> findExistingEmails(@Param("emails") Collection<String> emails);
 
     @Query("""
-    SELECT new com.sfes.registrar.faculty.dto.FacultySearchResponse$SearchResultItem(
-        f.id,
-        f.firstName,
-        f.middleName,
-        f.lastName,
-        CASE WHEN EXISTS(
+    SELECT
+        f.id AS id,
+        f.firstName AS firstName,
+        f.middleName AS middleName,
+        f.lastName AS lastName,
+        CASE WHEN EXISTS (
             SELECT fa
             FROM FacultyAssignment fa
             WHERE fa.faculty.id = f.id
                 AND fa.classSchedule.id = :classScheduleId
-            ) THEN true ELSE false END
-        )
+        ) THEN true ELSE false END AS isAssigned
     FROM Faculty f
     ORDER BY f.lastName ASC, f.id ASC
     """)
-    List<FacultySearchResponse.SearchResultItem> initialFacultySearch(
+    List<FacultySearchProjection> initialFacultySearch(
             @Param("classScheduleId") Long classScheduleId,
             Pageable pageable
     );
@@ -106,6 +105,39 @@ public interface FacultyRepository extends JpaRepository<Faculty, Long> {
     """, nativeQuery = true)
     List<FacultySearchProjection> findFacultySearch(
             @Param("classScheduleId") Long classScheduleId,
+            @Param("searchItem") String searchItem,
+            Pageable pageable
+    );
+
+    @Query(value = """
+    SELECT
+        f.id AS id,
+        f.first_name AS "firstName",
+        f.middle_name AS "middleName",
+        f.last_name AS "lastName",
+        false AS "isAssigned"
+    FROM faculty f
+    WHERE NOT EXISTS (
+        SELECT 1
+        FROM unnest(
+            regexp_split_to_array(
+                LOWER(TRIM(:searchItem)),
+                '\\s+'
+            )
+        ) AS word
+        WHERE word <> ''
+          AND LOWER(
+              CONCAT_WS(
+                  ' ',
+                  f.first_name,
+                  f.middle_name,
+                  f.last_name
+              )
+          ) !~ ('\\y' || word || '\\y')
+    )
+    ORDER BY f.last_name ASC, f.id ASC
+    """, nativeQuery = true)
+    List<FacultySearchProjection> searchFaculty(
             @Param("searchItem") String searchItem,
             Pageable pageable
     );
