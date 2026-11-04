@@ -59,9 +59,9 @@ public class FacultyController {
                 );
     }
 
-    @GetMapping("/{classScheduleId}")
+    @GetMapping("/search")
     public ApiResponse<FacultySearchResponse> getFacultyResponse(
-            @PathVariable Long classScheduleId,
+            @RequestParam(required = false) Long classScheduleId,
             @RequestParam(required = false) String searchItem
     ) {
         return new ApiResponse<>(

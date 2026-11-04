@@ -9,10 +9,7 @@ import com.sfes.registrar.department.DepartmentRepository;
 import com.sfes.registrar.faculty.Faculty;
 import com.sfes.registrar.faculty.FacultyRepository;
 import com.sfes.registrar.faculty.SortBy;
-import com.sfes.registrar.faculty.dto.FacultyResponse;
-import com.sfes.registrar.faculty.dto.FacultySearchResponse;
-import com.sfes.registrar.faculty.dto.RegisterFacultyRequest;
-import com.sfes.registrar.faculty.dto.UpdateFacultyRequest;
+import com.sfes.registrar.faculty.dto.*;
 import com.sfes.registrar.records.classschedule.ClassScheduleRepository;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -134,7 +131,7 @@ public class FacultyService {
 
     @Transactional(readOnly = true)
     public FacultySearchResponse getFacultySearchResponse(Long classScheduleId, String searchItem){
-        if (!classScheduleRepository.existsById(classScheduleId)) {
+        if (classScheduleId != null && !classScheduleRepository.existsById(classScheduleId)) {
             throw new InvalidRequestException("Class schedule not found");
         }
 
@@ -148,27 +145,35 @@ public class FacultyService {
 
         List<FacultySearchResponse.SearchResultItem> result;
 
-        if (normalizedSearch == null) {
-            result = facultyRepository.initialFacultySearch(
-                    classScheduleId,
-                    pageable
+        if (classScheduleId == null && normalizedSearch != null) {
+            result = mapToSearchResultItems(
+                    facultyRepository.searchFaculty(normalizedSearch, pageable)
             );
+
+        } else if (normalizedSearch == null) {
+            result = mapToSearchResultItems(
+                    facultyRepository.initialFacultySearch(classScheduleId, pageable)
+            );
+
         } else {
-            result = facultyRepository.findFacultySearch(
-                    classScheduleId,
-                    normalizedSearch,
-                    pageable
-            ).stream()
-                    .map(f -> new FacultySearchResponse.SearchResultItem(
-                            f.getId(),
-                            f.getFirstName(),
-                            f.getMiddleName(),
-                            f.getLastName(),
-                            f.getIsAssigned()
-                    ))
-                    .toList();
+            result = mapToSearchResultItems(
+                    facultyRepository.findFacultySearch(classScheduleId, normalizedSearch, pageable)
+            );
         }
 
         return new FacultySearchResponse(result);
     }
+
+    private List<FacultySearchResponse.SearchResultItem> mapToSearchResultItems(List<FacultySearchProjection> faculty) {
+            return faculty.stream()
+                .map(f -> new FacultySearchResponse.SearchResultItem(
+                        f.getId(),
+                        f.getFirstName(),
+                        f.getMiddleName(),
+                        f.getLastName(),
+                        f.getIsAssigned()
+                ))
+                .toList();
+    }
+
 }
