@@ -1,9 +1,12 @@
 package com.sfes.security.jwt;
 
+import com.sfes.auth.service.RedisService;
 import com.sfes.security.user.CustomUserDetailsService;
 import com.sfes.user.entity.User;
 import com.sfes.user.enums.Status;
 import com.sfes.user.repository.UserRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -27,6 +31,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final CustomUserDetailsService customerUserDetailsService;
     private final UserRepository userRepository;
+    private final RedisService redisService;
 
     @Override
     protected void doFilterInternal(
@@ -36,11 +41,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         String token = null;
-        String email = null;
 
         // 1. Find jwt in cookies
         if (request.getCookies() != null) {
-
             for (Cookie cookie : request.getCookies()) {
 
                 if ("token".equals(cookie.getName())) {
@@ -55,20 +58,25 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().getAuthentication() == null) {
 
             try {
+                Claims claims = jwtService.extractAllClaims(token);
 
-                // 3. Extract email from JWT
-                email = jwtService.extractEmail(token);
+                // 3. Extract email from JWT & jti
+                String email = claims.getSubject();
+                String jti = claims.get("jti", String.class);
+                Integer jwtVersion = claims.get("tokenVersion", Integer.class);
+
+                if (email == null || jti == null || jwtVersion == null) {
+                    throw new JwtException("Required JWT claims are missing");
+                }
 
                 User user = userRepository.findByEmail(email)
                         .orElse(null);
 
-                Integer jwtVersion = jwtService.extractTokenVersion(token);
-
-                // 4. Validate token version, status, and token
+                // 4. Validate token version, status, and check if the token is blacklisted in Redis
                 if (user != null
-                        && user.getTokenVersion() == jwtVersion
+                        && Objects.equals(user.getTokenVersion(), jwtVersion)
                         && user.getStatus() == Status.ACTIVE
-                        && jwtService.isTokenValid(token, email)
+                        && !redisService.exists("revoked:" + jti)
                 ) {
 
                     // 5. Load Spring Security UserDetails
